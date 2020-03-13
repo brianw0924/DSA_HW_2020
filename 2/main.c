@@ -5,6 +5,7 @@
 #include <assert.h>
 #include <string.h>
 
+
 typedef struct stack{
     int top;
     int start;
@@ -26,6 +27,8 @@ void Push(Stack *stack , char digit){
 
 
 int main(void){
+
+
     int k,ans=0;
     char *num=(char*)malloc(sizeof(char)*100000000);
     scanf("%s%d",num,&k);
@@ -89,11 +92,13 @@ int main(void){
     
     
     while(S->start<=S->top){
-        printf("%c",S->array[S->start++]);
+        putchar(S->array[S->start++]);
     }
 
     free(num);
     free(S->array);
     
+
+
     return 0;
 }
