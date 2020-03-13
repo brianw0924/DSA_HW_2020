@@ -37,28 +37,45 @@ int main(void){
     
     int i=0;
     //printf("%lu\n",strlen(num));
-    while(i<strlen(num)){//還沒放完stack就繼續跑
-        if(S->top==-1){//第一次
+    while(i<strlen(num)){
+
+        if(StackEmpty(S)){//空的直接push
             Push(S,num[i++]);
             //printf("(Push)stacktop=%c\n",S->array[S->top]);
-        }
-        else if(num[i] < S->array[S->top] && (num[i]!='0' || S->top!=0)){//當前數字比stack頂還小
 
-            while(num[i] < S->array[S->top] && (num[i]!='0' || S->top!=0) && (!StackEmpty(S)) &&(k!=0)){
-                Pop(S);
-                //printf("(Pop)stacktop=%c\n",S->array[S->top]);
-                k--;
+        }else if(num[i] < S->array[S->top]){//當前數字比stack頂還小
+
+            while( num[i] < S->array[S->top] && (!StackEmpty(S)) && (k!=0) && (num[i]!='0' || S->top!=0) ){
+                    Pop(S);
+                    //printf("(Pop)stacktop=%c\n",S->array[S->top]);
+                    k--;
             }
+
+            if( (num[i]=='0' && S->top==0) ){//現在刪掉可能會有leading zeros
+                    int countZero=0,temp=i;
+                    while(num[temp]=='0'){
+                        countZero++;
+                        temp++;
+                    }//現在temp指在第一個非零的
+                
+                    if( (S->array[S->start] > num[temp]) && (countZero <= k-1) ){
+                        Pop(S);
+                        i+=(countZero);
+                        k-=(countZero+1);
+                    }
+                }
             
             Push(S,num[i++]);
             //printf("(Push)stacktop=%c\n",S->array[S->top]);
-        }else{
+            }
+        else{
             Push(S,num[i++]);
             //printf("(Push)stacktop=%c\n",S->array[S->top]);
         }
-        
-        
     }
+        
+        
+    
     //printf("i=%d\n",i);
     i--;
     //printf("%d\n",k);
