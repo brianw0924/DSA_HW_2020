@@ -15,8 +15,8 @@ char Pop(Stack *stack){
     return(stack->array[stack->top--]);
 }
 
-void Print(Stack *stack){
-    printf("%c",stack->array[stack->start++]);
+int StackEmpty(Stack *stack){
+    return (stack->top == -1);
 }
 
 void Push(Stack *stack , char digit){
@@ -36,34 +36,47 @@ int main(void){
     S->array=(char*)malloc(sizeof(char)*100000000);
     
     int i=0;
+    //printf("%lu\n",strlen(num));
     while(i<strlen(num)){//還沒放完stack就繼續跑
-        if(S->top==-1)//第一次
+        if(S->top==-1){//第一次
             Push(S,num[i++]);
-
+            //printf("(Push)stacktop=%c\n",S->array[S->top]);
+        }
         else if(num[i] < S->array[S->top] && (num[i]!='0' || S->top!=0)){//當前數字比stack頂還小
 
-            while(num[i] < S->array[S->top] && (num[i]!='0' || S->top!=0)){
+            while(num[i] < S->array[S->top] && (num[i]!='0' || S->top!=0) && (!StackEmpty(S)) &&(k!=0)){
                 Pop(S);
+                //printf("(Pop)stacktop=%c\n",S->array[S->top]);
                 k--;
             }
             
             Push(S,num[i++]);
-            
-        }else
+            //printf("(Push)stacktop=%c\n",S->array[S->top]);
+        }else{
             Push(S,num[i++]);
-            //printf("stacktop=%c\n",S->array[S->top]);
+            //printf("(Push)stacktop=%c\n",S->array[S->top]);
+        }
+        
+        
     }
+    //printf("i=%d\n",i);
     i--;
+    //printf("%d\n",k);
 
-    if(k!=0)
-        for(;k!=0;k--,i--)
+    while(k!=0){
             Pop(S);
+            //printf("k=%d\n",k);
+            k--;
+            i--;
+        }
+    
     
     while(S->start<=S->top){
-        Print(S);
+        printf("%c",S->array[S->start++]);
     }
 
-
+    free(num);
+    free(S->array);
     
     return 0;
 }
