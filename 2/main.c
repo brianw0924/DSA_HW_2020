@@ -41,12 +41,12 @@ int main(void){
     int i=0;
     while(i<strlen(num)){
 
-        if(StackEmpty(S))//空的直接push
+        if(StackEmpty(S)){//空的直接push
             Push(S,num[i++]);
 
-        else if(S->array[S->top] < num[i] )
+        }else if(num[i] >= S->array[S->top])
             Push(S,num[i++]);
-            
+        
         else{//當前數字比stack頂還小
 
             while( num[i] < S->array[S->top] && (!StackEmpty(S)) && (k!=0) && (num[i]!='0' || S->top!=0) ){
@@ -61,7 +61,7 @@ int main(void){
                         temp++;
                     }//現在temp指在第一個非零的
                 
-                    if( (S->array[S->start] > num[temp]) && (k-1 > countZero ) ){
+                    if( (S->array[S->start] > num[temp]) && (countZero <= k-1) ){
                         Pop(S);
                         i+=(countZero);
                         k-=(countZero+1);
