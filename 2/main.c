@@ -39,18 +39,18 @@ int main(void){
     S->array=(char*)malloc(sizeof(char)*100000000);
     
     int i=0;
-    //printf("%lu\n",strlen(num));
     while(i<strlen(num)){
 
-        if(StackEmpty(S)){//空的直接push
+        if(StackEmpty(S))//空的直接push
             Push(S,num[i++]);
-            //printf("(Push)stacktop=%c\n",S->array[S->top]);
 
-        }else if(num[i] < S->array[S->top]){//當前數字比stack頂還小
+        else if(S->array[S->top] < num[i] )
+            Push(S,num[i++]);
+            
+        else{//當前數字比stack頂還小
 
             while( num[i] < S->array[S->top] && (!StackEmpty(S)) && (k!=0) && (num[i]!='0' || S->top!=0) ){
                     Pop(S);
-                    //printf("(Pop)stacktop=%c\n",S->array[S->top]);
                     k--;
             }
 
@@ -61,7 +61,7 @@ int main(void){
                         temp++;
                     }//現在temp指在第一個非零的
                 
-                    if( (S->array[S->start] > num[temp]) && (countZero <= k-1) ){
+                    if( (S->array[S->start] > num[temp]) && (k-1 > countZero ) ){
                         Pop(S);
                         i+=(countZero);
                         k-=(countZero+1);
@@ -69,23 +69,16 @@ int main(void){
                 }
             
             Push(S,num[i++]);
-            //printf("(Push)stacktop=%c\n",S->array[S->top]);
             }
-        else{
-            Push(S,num[i++]);
-            //printf("(Push)stacktop=%c\n",S->array[S->top]);
-        }
+        
     }
         
         
     
-    //printf("i=%d\n",i);
     i--;
-    //printf("%d\n",k);
 
     while(k!=0){
             Pop(S);
-            //printf("k=%d\n",k);
             k--;
             i--;
         }
