@@ -42,7 +42,10 @@ int main(void){
     coverage++;
 
     while(1){
-        ptr=strstr(++ptr,tempM->array);
+        if(ptr+1==NULL)
+            ptr=NULL;
+        else
+            ptr=strstr(++ptr,tempM->array);
         
         if(ptr==NULL){
             pushSize++;
