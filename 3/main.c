@@ -34,10 +34,14 @@ int main(void){
 
 
     int coverage=0,pushSize=0;
+
     Queue *tempM=genQueue();
-    char *ptr=N;
     Push(tempM,M[pushSize]);
-    for(int j=0;j<20;j++){
+
+    char *ptr=strstr(N,tempM->array);
+    coverage++;
+
+    while(1){
         ptr=strstr(++ptr,tempM->array);
         
         if(ptr==NULL){
@@ -47,8 +51,8 @@ int main(void){
         }
         playerIndex++;
         playerIndex%=2;
-        coverage++;
-
+        coverage+=strlen(tempM->array);
+        
         if(strlen(tempM->array)==strlen(M)){
             printf("%s\n%d\n",player[playerIndex],coverage);
             break;
