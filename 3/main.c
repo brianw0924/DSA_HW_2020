@@ -4,29 +4,27 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <string.h>
-typedef struct queue{
-    int front;
-    int rear;
+typedef struct Stack{
+    int top;
     char *array;
-} Queue;
+} Stack;
 
-Queue *genQueue(){
-    Queue *Q=(Queue*)malloc(sizeof(Queue));
-    assert(Q!=NULL);
-    Q->front=-1;
-    Q->rear=0;
-    Q->array=(char*)malloc(sizeof(char)*30000000);
-    return Q;
+Stack *genStack(){
+    Stack *S=(Stack*)malloc(sizeof(Stack));
+    assert(S!=NULL);
+    S->top=-1;
+    S->array=(char*)malloc(sizeof(char)*30000000);
+    return S;
 }
 
-void Push(Queue *Q,char m){
-    Q->array[++Q->front]=m;
+void Push(Stack *S,char m){
+    S->array[++S->top]=m;
 }
 
 
 int main(void){
     char player[2][10];
-    int playerIndex;
+    int playerIndex=0;
     scanf("%s%s",player[0],player[1]);
 
     char *N=(char*)malloc(sizeof(char)*30000000),*M=(char*)malloc(sizeof(char)*30000000);
@@ -35,36 +33,48 @@ int main(void){
 
     int coverage=0,pushSize=0;
 
-    Queue *tempM=genQueue();
+    Stack *tempM=genStack();
     Push(tempM,M[pushSize]);
 
     char *ptr=strstr(N,tempM->array);
     coverage++;
+    if(strlen(tempM->array)==strlen(M) && ptr!=NULL){//第一次就找到
+            coverage%=1000000007;
+            printf("%s\n%d\n",player[playerIndex],coverage);
+    }else{
+
 
     while(1){
-        if(ptr+1==NULL)
-            ptr=NULL;
-        else
-            ptr=strstr(++ptr,tempM->array);
-        
-        if(ptr==NULL){
-            pushSize++;
-            Push(tempM,M[pushSize]);
-            ptr=strstr(N,tempM->array);
-        }
-        playerIndex++;
-        playerIndex%=2;
-        coverage+=strlen(tempM->array);
-        
+
         if(strlen(tempM->array)==strlen(M)){
+            coverage%=1000000007;
             printf("%s\n%d\n",player[playerIndex],coverage);
             break;
         }
+
+        if(&ptr[1]==NULL)//檢查是否找到最後一位
+            ptr=NULL;
+        else
+            ptr=strstr(&ptr[1],tempM->array);
+        
+        if(ptr==NULL){
+            
+            pushSize++;
+            Push(tempM,M[pushSize]);
+            ptr=strstr(N,tempM->array);
+            coverage+=strlen(tempM->array);
+            playerIndex++;
+            playerIndex&=1;
+            
+        }
+        else{
+            coverage+=strlen(tempM->array);
+            playerIndex++;
+            playerIndex&=1;
+        }
+     
     }
-
-
-
-
-
+    }
+    
     return 0;
 }
