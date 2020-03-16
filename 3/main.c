@@ -39,23 +39,25 @@ int main(void){
     char *ptr=strstr(N,tempM->array);
     coverage++;
     if(strlen(tempM->array)==strlen(M) && ptr!=NULL){//第一次就找到
+
             coverage%=1000000007;
             printf("%s\n%d\n",player[playerIndex],coverage);
+
     }else{
 
-
     while(1){
-
+        //printf("我要找的是 : %s\n",tempM->array);
+        //printf("ptr=%s\n\n",ptr);
         if(strlen(tempM->array)==strlen(M)){
             coverage%=1000000007;
             printf("%s\n%d\n",player[playerIndex],coverage);
             break;
         }
 
-        if(&ptr[1]==NULL)//檢查是否找到最後一位
+        if(&ptr[strlen(tempM->array)]==NULL)//檢查是否找到最後一位
             ptr=NULL;
         else
-            ptr=strstr(&ptr[1],tempM->array);
+            ptr=strstr(&ptr[strlen(tempM->array)],tempM->array);
         
         if(ptr==NULL){
             
