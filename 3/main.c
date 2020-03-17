@@ -4,22 +4,6 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <string.h>
-typedef struct Stack{
-    int top;
-    char *array;
-} Stack;
-
-Stack *genStack(){
-    Stack *S=(Stack*)malloc(sizeof(Stack));
-    assert(S!=NULL);
-    S->top=-1;
-    S->array=(char*)malloc(sizeof(char)*30000000);
-    return S;
-}
-
-void Push(Stack *S,char m){
-    S->array[++S->top]=m;
-}
 
 
 int main(void){
@@ -27,56 +11,53 @@ int main(void){
     int playerIndex=0;
     scanf("%s%s",player[0],player[1]);
 
-    char *N=(char*)malloc(sizeof(char)*30000000),*M=(char*)malloc(sizeof(char)*30000000);
+    char *N=(char*)malloc(sizeof(char)*30000000),*M=(char*)malloc(sizeof(char)*30000000),*tempM=(char*)malloc(sizeof(char)*30000000);
     scanf("%s%s",N,M);
 
 
     int coverage=0,pushSize=0;
 
-    Stack *tempM=genStack();
-    Push(tempM,M[pushSize]);
-
-    char *ptr=strstr(N,tempM->array);
+    tempM[pushSize]=M[pushSize];
+    tempM[pushSize+1]='\0';
+    char *ptr=strstr(N,tempM);
     coverage++;
-    if(strlen(tempM->array)==strlen(M) && ptr!=NULL){//第一次就找到
 
-            coverage%=1000000007;
-            printf("%s\n%d\n",player[playerIndex],coverage);
 
-    }else{
+
 
     while(1){
         //printf("我要找的是 : %s\n",tempM->array);
         //printf("ptr=%s\n\n",ptr);
-        if(strlen(tempM->array)==strlen(M)){
+        if(strlen(tempM)==strlen(M)){//先檢查有沒有找到,如果現在要找的string 長度=Ｍ 代表找到了
             coverage%=1000000007;
             printf("%s\n%d\n",player[playerIndex],coverage);
             break;
         }
 
-        if(&ptr[strlen(tempM->array)]==NULL)//檢查是否找到最後一位
+        if(&ptr[strlen(tempM)]==NULL)//以防下一段開頭是NULL
             ptr=NULL;
         else
-            ptr=strstr(&ptr[strlen(tempM->array)],tempM->array);
+            ptr=strstr(&ptr[strlen(tempM)],tempM);
         
-        if(ptr==NULL){
+        if(ptr==NULL){//找不到下一個tempM了
             
-            pushSize++;
-            Push(tempM,M[pushSize]);
-            ptr=strstr(N,tempM->array);
-            coverage+=strlen(tempM->array);
+            pushSize++;//等等要多推一個M進tempM
+            tempM[pushSize]=M[pushSize];
+            tempM[pushSize+1]='\0';
+            ptr=strstr(N,tempM);//從頭開始找新的tempM
+            coverage+=strlen(tempM);
             playerIndex++;
             playerIndex&=1;
             
         }
         else{
-            coverage+=strlen(tempM->array);
+            coverage+=strlen(tempM);
             playerIndex++;
             playerIndex&=1;
         }
      
     }
-    }
+    
     
     return 0;
 }
