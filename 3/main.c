@@ -12,7 +12,7 @@ int main(void){
     int playerIndex=0;
     scanf("%s%s",player[0],player[1]);
 
-    char *N=(char*)malloc(sizeof(char)*30000000),*M=(char*)malloc(sizeof(char)*30000000),*tempM=(char*)malloc(sizeof(char)*30000000);
+    char *N=(char*)malloc(sizeof(char)*10000),*M=(char*)malloc(sizeof(char)*10000),*tempM=(char*)malloc(sizeof(char)*10000);
     scanf("%s%s",N,M);
 
 
