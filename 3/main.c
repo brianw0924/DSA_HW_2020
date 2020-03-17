@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <string.h>
+#include <stdbool.h>
 
 
 int main(void){
@@ -23,16 +24,16 @@ int main(void){
     coverage++;
 
 
+    bool win=0;
 
-
-    while(1){
+    while(!win){
         //printf("我要找的是 : %s\n",tempM->array);
         //printf("ptr=%s\n\n",ptr);
         if(strlen(tempM)==strlen(M)){//先檢查有沒有找到,如果現在要找的string 長度=Ｍ 代表找到了
             coverage%=1000000007;
             printf("%s\n%d\n",player[playerIndex],coverage);
-            break;
-        }
+            win=!win;
+        }else{
 
         if(&ptr[strlen(tempM)]==NULL)//以防下一段開頭是NULL
             ptr=NULL;
@@ -55,7 +56,7 @@ int main(void){
             playerIndex++;
             playerIndex&=1;
         }
-     
+        }
     }
     
     
