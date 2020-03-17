@@ -8,13 +8,15 @@
 
 
 int main(void){
-    char player[2][10];
+    char player[2][11];
     int playerIndex=0;
     scanf("%s%s",player[0],player[1]);
 
-    char *N=(char*)malloc(sizeof(char)*30000000),*M=(char*)malloc(sizeof(char)*30000000),*tempM=(char*)malloc(sizeof(char)*30000000);
+    char *N=(char*)malloc(sizeof(char)*30000001),*M=(char*)malloc(sizeof(char)*30000001);
     scanf("%s%s",N,M);
-
+    char *tempM=(char*)malloc(sizeof(char)*strlen(M)+1);
+    N=(char*)realloc(N,sizeof(char)*strlen(N)+1);
+    M=(char*)realloc(M,sizeof(char)*strlen(M)+1);
 
     int coverage=0,pushSize=0;
 
