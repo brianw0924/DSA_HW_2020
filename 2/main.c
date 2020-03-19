@@ -9,7 +9,7 @@
 typedef struct stack{
     int top;
     int start;
-    char *array;
+    char array[100000001];
 } Stack;
 
 char Pop(Stack *stack){
@@ -24,22 +24,21 @@ void Push(Stack *stack , char digit){
     stack->array[++(stack->top)]=digit;
 }
 
-
+char num[100000001];
 
 int main(void){
 
 
-    int k,ans=0;
-    char *num=(char*)malloc(sizeof(char)*100000000);
+    int k;
+    
     scanf("%s%d",num,&k);
     
     Stack *S=(Stack*)malloc(sizeof(Stack));
     S->top=-1;
     S->start=0;
-    S->array=(char*)malloc(sizeof(char)*100000000);
     
     int i=0;
-    while(i<strlen(num)){
+    while(num[i]!='\0'){
 
         if(StackEmpty(S)){//空的直接push
             Push(S,num[i++]);
@@ -82,14 +81,9 @@ int main(void){
             k--;
             i--;
         }
-    
-    
-    while(S->start<=S->top){
-        putchar(S->array[S->start++]);
-    }
+    S->array[++S->top]='\0';
+    printf("%s\n",S->array);
 
-    free(num);
-    free(S->array);
     
 
 
