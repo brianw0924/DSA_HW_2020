@@ -29,7 +29,7 @@ char num[100000001];
 int main(void){
 
 
-    int k;
+    int k,Zero=-1;
     
     scanf("%s%d",num,&k);
     
@@ -39,6 +39,7 @@ int main(void){
     
     int i=0;
     while(num[i]!='\0'){
+
 
         if(StackEmpty(S)){//空的直接push
             Push(S,num[i++]);
@@ -52,6 +53,13 @@ int main(void){
                     Pop(S);
                     k--;
             }
+
+            if(S->array[S->top]==0 && (S->array[0] < num[i]) && ((S->top - S->start +1)<=k)){
+                S->top=-1;
+                k-=(S->top - S->start +1);
+            }
+            
+                
 
             if( (num[i]=='0' && S->top==0) ){//現在刪掉可能會有leading zeros
                     int countZero=0,temp=i;
