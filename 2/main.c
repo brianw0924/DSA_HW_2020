@@ -39,8 +39,10 @@ int main(void){
     
     int i=0;
     while(num[i]!='\0'){
-
-
+        /*printf("k=%d\n",k);
+        printf("num=%c\n",num[i]);
+        printf("stack=%s\n",S->array);
+        printf("top=%c\n\n",S->array[S->top]);*/
         if(StackEmpty(S)){//空的直接push
             Push(S,num[i++]);
 
@@ -54,9 +56,9 @@ int main(void){
                     k--;
             }
 
-            if(S->array[S->top]==0 && (S->array[0] < num[i]) && ((S->top - S->start +1)<=k)){
-                S->top=-1;
+            if(S->array[S->top]=='0' && (S->array[0] > num[i]) && ((S->top - S->start +1)<=k)){
                 k-=(S->top - S->start +1);
+                S->top=-1;    
             }
             
                 
@@ -68,7 +70,7 @@ int main(void){
                         temp++;
                     }//現在temp指在第一個非零的
                 
-                    if( (S->array[S->start] > num[temp]) && (countZero <= k-1) ){
+                    if( (S->array[S->start] > num[temp]) && (countZero <= (k-1)) ){
                         Pop(S);
                         i+=(countZero);
                         k-=(countZero+1);
