@@ -30,13 +30,13 @@ int main(void){
 
 
     int k,ans=0;
-    char *num=(char*)malloc(sizeof(char)*100000000);
+    char *num=(char*)malloc(sizeof(char)*100000001);
     scanf("%s%d",num,&k);
     
     Stack *S=(Stack*)malloc(sizeof(Stack));
     S->top=-1;
     S->start=0;
-    S->array=(char*)malloc(sizeof(char)*100000000);
+    S->array=(char*)malloc(sizeof(char)*100000001);
     
     int i=0;
     while(i<strlen(num)){
@@ -82,11 +82,13 @@ int main(void){
             k--;
             i--;
         }
-    
-    
-    while(S->start<=S->top){
-        putchar(S->array[S->start++]);
+
+    int ten=1;
+    while(S->top!=-1){
+    ans+=(Pop(S)-'0')*ten;
+    ten=(ten<<3) + (ten<<1);
     }
+    printf("%d\n",ans);
 
     free(num);
     free(S->array);
