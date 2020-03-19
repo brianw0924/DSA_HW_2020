@@ -42,44 +42,46 @@ int main(void){
         /*printf("k=%d\n",k);
         printf("num=%c\n",num[i]);
         printf("stack=%s\n",S->array);
-        printf("top=%c\n\n",S->array[S->top]);*/
+        printf("top=%d\n",S->top);*/
+
         if(StackEmpty(S)){//空的直接push
             Push(S,num[i++]);
 
-        }else if(num[i] >= S->array[S->top])
-            Push(S,num[i++]);
-        
-        else{//當前數字比stack頂還小
+        }else if(num[i] >= S->array[S->top]){
 
-            while( num[i] < S->array[S->top] && (!StackEmpty(S)) && (k!=0) && (num[i]!='0' || S->top!=0) ){
+            if(num[i]!='0'){
+                if((S->array[S->top]=='0') && (S->array[0] > num[i]) && ((S->top - S->start +1)<=k)){
+                    k-=( (S->top) - (S->start) +1 );
+                    S->top=-1;
+                }
+            }
+            Push(S,num[i++]);
+
+        }else{//num[i]比stack的top還"小"
+
+            if(num[i]=='0'){
+                while(num[i] < S->array[S->top] && k!=0 && S->top!=0){//Pop到底
                     Pop(S);
                     k--;
-            }
-
-            if(S->array[S->top]=='0' && (S->array[0] > num[i]) && ((S->top - S->start +1)<=k)){
-                k-=(S->top - S->start +1);
-                S->top=-1;    
-            }
-            
-                
-
-            if( (num[i]=='0' && S->top==0) ){//現在刪掉可能會有leading zeros
-                    int countZero=0,temp=i;
-                    while(num[temp]=='0'){
-                        countZero++;
-                        temp++;
-                    }//現在temp指在第一個非零的
-                
-                    if( (S->array[S->start] > num[temp]) && (countZero <= (k-1)) ){
-                        Pop(S);
-                        i+=(countZero);
-                        k-=(countZero+1);
-                    }
                 }
-            
-            Push(S,num[i++]);
+                
+            }else{//num!='0'
+                while(num[i] < S->array[S->top] && k!=0){
+                    Pop(S);
+                    k--;
+                }
+
+                if((S->array[S->top]=='0') && (S->array[0] > num[i]) && ((S->top - S->start +1)<=k)){
+                    k-=( (S->top) - (S->start) +1 );
+                    S->top=-1;
+                }
+                
             }
-        
+
+            
+        Push(S,num[i++]);
+            }
+    //printf("\n\n");
     }
         
         
