@@ -51,7 +51,6 @@ int main(void){
     scanf("%d",&N);
     Stand **stand=(Stand**)malloc(sizeof(Stand*)*N);
     for(int i=0; i<N ; i++){
-        //scanf("%d",&(stand[i].sth));
         scanf("%d",&sth);
         stand[i]=genStand(sth);
     }
@@ -61,54 +60,29 @@ int main(void){
     
     
      Stack *stack=genStack(N);//stack裡面存放index
-     int temp;
-     /*for(int i=0;i<N;i++){
-        //printf("%d\n",i);
-
-        if(stack->top == -1){
-             stand[i]->left=0;
-             }
-        else{
-            stand[i]->left=i;
+     int temp,d;
+     
+     for(int i=0;i<N;i++){//從左邊找right
+        
             //把打得到的Pop光
-            while(stack->top != -1 && stand[stack->index[stack->top]]->sth <= stand[i]->sth){
-                temp=Pop(stack);
+        while(stack->top != -1 && stand[stack->index[stack->top]]->sth <= stand[i]->sth){
+            temp=Pop(stack);//temp是index
+            d=stand[temp]->rng - (i-1-temp);
+            if(d>=0)
                 stand[temp]->right=i-1;
-                if(stand[i]->sth != stand[temp]->sth)
-                    stand[i]->left=stand[temp]->left;
-                }
-
-            while( (stand[temp]->sth != stand[i]->sth) &&
-                (stand[temp]->left - 1>=0) && 
-                (stand[stand[temp]->left - 1]->sth < stand[i]->sth) ){
-                stand[i]->left = (stand[temp]->left) -1 ;
-                temp=stand[i]->left;
-            }
+            else
+                stand[temp]->right=temp+stand[temp]->rng;
         }
         
-
-        Push(stack,i);
-        //printf("%d\n",i);
-     }*/
-
-     for(int i=0;i<N;i++){
-
-        if(stack->top == -1){
-             stand[i]->left=0;
-             }
-        else{
-            //把打得到的Pop光
-            while(stack->top != -1 && stand[stack->index[stack->top]]->sth <= stand[i]->sth){
-                temp=Pop(stack);
-                stand[temp]->right=i-1;
-            }
-        }
         Push(stack,i);
      }
 
      while(stack->top!=-1){
-         temp=Pop(stack);
-         stand[temp]->right=N-1;
+        temp=Pop(stack);
+        if(stand[temp]->rng < (N-1-temp))
+            stand[temp]->right=temp+stand[temp]->rng;
+        else
+            stand[temp]->right=N-1;
      }
 
     /*for(int i=0;i<N;i++){
@@ -117,24 +91,28 @@ int main(void){
 
     stack->top=-1;
 
-     for(int i=N-1;i>=0;i--){
-
-        if(stack->top == -1){
-             stand[i]->right=N-1;
-             }
-        else{
-            //把打得到的Pop光
-            while(stack->top != -1 && stand[stack->index[stack->top]]->sth <= stand[i]->sth){
-                temp=Pop(stack);
+     for(int i=N-1;i>=0;i--){//從右邊找left
+        
+        //把打得到的Pop光
+        while(stack->top != -1 && stand[stack->index[stack->top]]->sth <= stand[i]->sth){
+            temp=Pop(stack);
+            d=stand[temp]->rng - (temp-(i+1));
+            if(d>=0)
                 stand[temp]->left=i+1;
-            }
+            else
+                stand[temp]->left=temp-stand[temp]->rng;
+
         }
+        
         Push(stack,i);
      }
 
      while(stack->top!=-1){
-         temp=Pop(stack);
-         stand[temp]->left=0;
+        temp=Pop(stack);
+        if(stand[temp]->rng<temp)
+            stand[temp]->left=temp-stand[temp]->rng;
+        else
+            stand[temp]->left=0;
      }
 
      /*for(int i=0;i<N;i++){
