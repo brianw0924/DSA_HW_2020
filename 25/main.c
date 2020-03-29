@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include<stdint.h>
 #include <math.h>
+#include <stdbool.h>
 #include <stdlib.h>
 #include <assert.h>
 #include <string.h>
@@ -27,21 +28,6 @@ Info *genInfo(){
     return I;
 }
 
-/*typedef struct{
-    DoubleLL *info->head;
-    DoubleLL *info->tail;
-    DoubleLL *info->cursor;
-} text;
-
-text genText(){
-    text T;
-    T.info->head=NULL;
-    T.info->tail=NULL;
-    T.info->cursor=NULL;
-    return text;
-}*/
-
-
 
 DoubleLL *genDoubleLL(char letter){
     DoubleLL *DLL = (DoubleLL*)malloc(sizeof(DoubleLL));
@@ -51,7 +37,7 @@ DoubleLL *genDoubleLL(char letter){
     return DLL;
 }
 
-DoubleLL *Insert(DoubleLL *new , Info *info){
+Info *Insert(DoubleLL *new , Info *info){
 
     if(info->tail==NULL && info->head==NULL && info->cursor==NULL){//text全空
         info->head=new;
@@ -63,8 +49,8 @@ DoubleLL *Insert(DoubleLL *new , Info *info){
         info->head=new;
         info->cursor=new;
     }else if(info->cursor==info->tail){//text有東西,info->cursor在最尾
-        info->tail->next=new;
         new->prev=info->tail;
+        info->tail->next=new;
         info->tail=new;
         info->cursor=new;
     }else{//text有東西,info->cursor在中間
@@ -77,30 +63,33 @@ DoubleLL *Insert(DoubleLL *new , Info *info){
     info->cursor=new;
     }
 
-    return info->head;
+    return info;
 }
 
+Info *Overwrite(DoubleLL *new , DoubleLL *selectStart , Info *info , int select){
+    if(select>0){//selectStart -> new -> cursor的next
+        new->next = info->cursor->next;
+        new->next->prev = new;
+        selectStart->next = new;
+        new->prev = selectStart;
+    }else if(select<0){//cursor -> new -> selectStart的next
+        new->next = selectStart->next;
+        new->next->prev = new;
+        info->cursor->next = new;
+        new->prev = info->cursor;
+    }
 
-
-/*typedef struct{
-    int top;
-    int info->cursor;
-    DoubleLL *info->head;
-} Stack;
-
-Stack *genStack(){
-    Stack *S=(Stack*)malloc(sizeof(Stack));
-    S->front=-1;
-    S->rear=0;
-    S->info->head=NULL;
-}*/
+    return info;
+}
 
 int main(void){
     int T;
-    Info *info=genInfo();//info->cursor=NULL等同於在最前面
+    Info *info=genInfo();//head,tail,cursor
     scanf("%d",&T);
     char *str=(char*)malloc(sizeof(char)*1000000);
-    int letter;
+    int letter,select;
+    DoubleLL *selectStart=NULL;
+    bool selectionMode=0;
 
     
     
@@ -112,31 +101,72 @@ int main(void){
 
             letter=(int)str[j];
 
-            if (islower(letter)){
+            if (islower(letter)){//a~z
                 DoubleLL *new=genDoubleLL(str[j]);
-                info->head=Insert(new,info);  
-            }else{
+
+                if(selectionMode){
+                    info=Overwrite(new,selectStart,info,select);
+                    selectionMode=!selectionMode;//exit selectionMode
+                    select=0;//判斷select方向歸零
+                }else{
+                    info=Insert(new,info);  
+                }
+
+            }else{//指令
 
                 switch (str[j]){
-                    case 'H':
+
+                    case 'H'://左移
+                        if(selectionMode)
+                            select--;//選取模式往左
+
                         if(info->cursor!=NULL){
-                            if(info->cursor==info->head)
+                            
+                            if(info->cursor==info->head)//已經在最頭
                                 info->cursor=NULL;
                             else
                                 info->cursor=info->cursor->prev;
                         }
                         break;
-                    case 'L':
-                        if(info->cursor!=NULL){
-                            if(info->cursor!=info->tail)
+
+                    case 'L'://右移
+                        if(selectionMode)
+                            select++;//選取模式往右
+
+
+                        if(info->head!=NULL){
+                            if(info->cursor==NULL)//已經在最頭
+                                info->cursor = info->head;
+                            else if(info->cursor!=info->tail)//不在最尾
                                 info->cursor=info->cursor->next;
                         }
                         break;
-                    case 'I':
-                    case 'A':
-                    case 'V':
-                    case 'D':
-                    case 'R':
+
+                    case 'I'://移到最頭
+                        info->cursor=NULL;
+                        break;
+
+                    case 'A'://移到最尾
+                        info->cursor=info->tail;
+                        break;
+
+                    case 'V'://SelectionMode
+                        if(selectionMode)//原本已經selectionMode,現在要關掉
+                            selectStart=NULL;
+                        else{//原本不在selectionMode,現在要進入
+                            selectStart=info->cursor;
+                            select=0;//紀錄選取的方向
+                        }
+                        selectionMode=!selectionMode;
+                        break;
+
+                    case 'D'://Delete
+                        /*if(select){
+                            info=Delete();
+                            selectionMode=!selectionMode;
+                        }
+                        break;*/
+                    case 'R'://Reverse
                     default:
                     break;
                 }
