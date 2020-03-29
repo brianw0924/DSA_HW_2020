@@ -85,6 +85,27 @@ Info *Overwrite(DoubleLL *new , DoubleLL *selectStart , Info *info , int select)
     return info;
 }
 
+Info *Delete(DoubleLL *selectStart , Info *info , int select){
+    if(select>0){
+        if(info->cursor == info->tail){
+            selectStart->next = NULL;
+            info->tail = selectStart;
+        }else{
+            selectStart->next = info->cursor->next;
+            selectStart->next->prev = selectStart;
+        }
+    }else if(select<0){
+        if(selectStart == info->tail){
+            info->cursor->next = NULL;
+            info->tail = info->cursor;
+        }else{
+            info->cursor->next = selectStart->next;
+            info->cursor->next->prev = info->cursor;
+        }
+    }
+    return info;
+}
+
 int main(void){
     int T;
     Info *info=genInfo();//head,tail,cursor
@@ -158,11 +179,11 @@ int main(void){
                         break;
 
                     case 'D'://Delete
-                        /*if(select){
-                            info=Delete();
+                        if(selectionMode && select!=0){
+                            info=Delete(selectStart , info , select);
                             selectionMode=!selectionMode;
                         }
-                        break;*/
+                        break;
                     case 'R'://Reverse
                     default:
                     break;
