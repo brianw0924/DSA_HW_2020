@@ -94,6 +94,8 @@ Info *Delete(DoubleLL *selectStart , Info *info , int select){
             selectStart->next = info->cursor->next;
             selectStart->next->prev = selectStart;
         }
+        info->cursor = selectStart;
+
     }else if(select<0){
         if(selectStart == info->tail){
             info->cursor->next = NULL;
