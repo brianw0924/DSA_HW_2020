@@ -112,9 +112,6 @@ Info *Delete(Info *info , Selection *start, Selection *end){
 }
 
 Info *Reverse(Info *info , Selection *start, Selection *end){
-    //printf("IN end=%c\n",end->cur->letter);
-
-    //printf("start=%c\n",start->cur->letter);
 
     if(start->next == end->cur){//只有反轉一個字 = 直接回傳
         return info;
@@ -146,8 +143,6 @@ Info *Reverse(Info *info , Selection *start, Selection *end){
     start->next = end->cur;
     end->cur = temp;
 
-    //printf("OUT end=%c\n",end->cur->letter);
-    //printf("OUT info=%c\n",info->cursor->letter);
 
 
     return info;
@@ -181,6 +176,7 @@ int main(void){
     int letter;
     bool selectionMode=false;
     Node *temp;
+    Selection *S_temp;
     Selection *start=genSelection(),*end=genSelection();
 
     
@@ -211,9 +207,6 @@ int main(void){
                 switch (str[j]){
 
                     case 'H'://左移
-                        //if(end->cur)
-                        //printf("beforemoveleft,end=%c\n",end->cur->letter);
-                        //printf("beforemoveleft,cursor=%c\n",info->cursor->letter);
 
                         temp=info->cursor;
                         if(info->prev != NULL){//移動
@@ -232,13 +225,11 @@ int main(void){
                                 end->prev = info->prev;
                                 end->next = info->next;
                             }
-                            //printf("moveleft, end=%c\n",end->cur->letter);
                         }
                         
                         break;
                     case 'L'://右移
                         temp = info->cursor;
-                        //printf("test\n");
 
                         if(info->next != NULL){//移動
                             info->prev = info->cursor;
@@ -248,30 +239,83 @@ int main(void){
 
 
                         if(selectionMode){
-                            //printf("temp=%c\n",temp->letter);
-                            //printf("end=%c\n",end->cur->letter);
                             if(temp == end->cur){
                                 end->cur = info->cursor;
                                 end->prev = info->prev;
                                 end->next = info->next;
                             }
                             else{
-                                //printf("count\n");
                                 start->cur = info->cursor;
                                 start->prev = info->prev;
                                 start->next = info->next;
                             }
-                            //printf("%c %c %c\n",start->prev->letter,start->cur->letter,start->next->letter);
                         }
 
                         break;
                     case 'I'://移到最頭
-                        /*info->cursor=NULL;
-                        break;*/
+                        if(selectionMode){
+                            if(info->cursor == start->cur){//直接移
+                                info->prev = NULL;
+                                info->cursor = info->head;
+                                info->next = info->head->ptr;
+                                start->cur = info->cursor;
+                                start->prev = info->prev;
+                                start->next = info->next;
+                            }else{
+                                S_temp = start;
+                                
+                                info->prev = NULL;
+                                info->cursor = info->head;
+                                info->next = info->head->ptr;
+                                start->cur = info->cursor;
+                                start->prev = info->prev;
+                                start->next = info->next;
+
+                                end->cur = S_temp->cur;
+                                end->prev = S_temp->prev;
+                                end->next = S_temp->next;
+
+                            }
+                            
+
+                        }else{
+                            info->prev = NULL;
+                            info->cursor = info->head;
+                            info->next = info->head->ptr;
+                        }
+                        
+                        break;
 
                     case 'A'://移到最尾
-                        /*info->cursor=info->tail;
-                        break;*/
+                        if(selectionMode){
+                            if(info->cursor == end->cur){
+                                info->next = NULL;
+                                info->cursor = info->tail;
+                                info->prev = info->tail->ptr;
+                                end->cur = info->cursor;
+                                end->prev = info->prev;
+                                end->next = info->next;
+                            }else{
+                                S_temp = end;
+                                
+                                info->next = NULL;
+                                info->cursor = info->tail;
+                                info->prev = info->tail->ptr;
+                                end->cur = info->cursor;
+                                end->prev = info->prev;
+                                end->next = info->next;
+
+                                start->cur = S_temp->cur;
+                                start->prev = S_temp->prev;
+                                start->next = S_temp->next;
+                                
+                            }
+                        }else{
+                            info->next = NULL;
+                            info->cursor = info->tail;
+                            info->prev = info->tail->ptr;
+                        }
+                        break;
 
                     case 'V'://SelectionMode
                         if(!selectionMode){
@@ -281,7 +325,6 @@ int main(void){
                             end->cur = info->cursor;
                             end->prev = info->prev;
                             end->next = info->next;
-                            //printf("when V, end=%c\n",end->cur->letter);
                         }
                         selectionMode = !selectionMode;
                         break;
