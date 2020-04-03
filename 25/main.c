@@ -111,8 +111,63 @@ Info *Delete(Info *info , Selection *start, Selection *end){
 
 }
 
+Info *Reverse(Info *info , Selection *start, Selection *end){
+    //printf("IN end=%c\n",end->cur->letter);
+
+    //printf("start=%c\n",start->cur->letter);
+
+    if(start->next == end->cur){//只有反轉一個字 = 直接回傳
+        return info;
+    }
 
 
+    if(info->cursor == start->cur)
+        info->next = end->cur;
+    else{
+        info->next = end->next;
+        info->cursor = start->next;
+        info->prev = XOR(start->cur , start->next->ptr); 
+    }
+
+    start->cur->ptr = XOR(start->prev , end->cur);
+    end->cur->ptr = XOR(start->cur , end->prev);
+    end->prev = XOR(start->cur , start->next->ptr);
+    start->next->ptr = XOR( end->prev,end->next);
+
+    if(end->cur == info->tail)
+        info->tail = start->next;
+    else
+        end->next->ptr = XOR(start->next , XOR(end->cur , end->next->ptr));
+
+    
+
+    Node *temp = start->next;
+
+    start->next = end->cur;
+    end->cur = temp;
+
+    //printf("OUT end=%c\n",end->cur->letter);
+    //printf("OUT info=%c\n",info->cursor->letter);
+
+
+    return info;
+
+}
+
+
+void Print(Info *info){
+        Node *temp,*cur,*prev;
+        cur = info->head->ptr;
+        prev = info->head;
+        
+        while(cur!=NULL){
+            temp = cur;
+            printf("%c",cur->letter);
+            cur = XOR(prev , cur->ptr);
+            prev = temp;
+        }
+        printf("\n");
+}
 
 
 int main(void){
@@ -156,6 +211,10 @@ int main(void){
                 switch (str[j]){
 
                     case 'H'://左移
+                        //if(end->cur)
+                        //printf("beforemoveleft,end=%c\n",end->cur->letter);
+                        //printf("beforemoveleft,cursor=%c\n",info->cursor->letter);
+
                         temp=info->cursor;
                         if(info->prev != NULL){//移動
                             info->next = info->cursor;
@@ -173,11 +232,13 @@ int main(void){
                                 end->prev = info->prev;
                                 end->next = info->next;
                             }
+                            //printf("moveleft, end=%c\n",end->cur->letter);
                         }
                         
                         break;
                     case 'L'://右移
                         temp = info->cursor;
+                        //printf("test\n");
 
                         if(info->next != NULL){//移動
                             info->prev = info->cursor;
@@ -187,16 +248,20 @@ int main(void){
 
 
                         if(selectionMode){
+                            //printf("temp=%c\n",temp->letter);
+                            //printf("end=%c\n",end->cur->letter);
                             if(temp == end->cur){
                                 end->cur = info->cursor;
                                 end->prev = info->prev;
                                 end->next = info->next;
                             }
                             else{
+                                //printf("count\n");
                                 start->cur = info->cursor;
                                 start->prev = info->prev;
                                 start->next = info->next;
                             }
+                            //printf("%c %c %c\n",start->prev->letter,start->cur->letter,start->next->letter);
                         }
 
                         break;
@@ -216,6 +281,7 @@ int main(void){
                             end->cur = info->cursor;
                             end->prev = info->prev;
                             end->next = info->next;
+                            //printf("when V, end=%c\n",end->cur->letter);
                         }
                         selectionMode = !selectionMode;
                         break;
@@ -226,24 +292,22 @@ int main(void){
                         }
                         break;
                     case 'R'://Reverse
+                        if(selectionMode && start->cur != end->cur){
+                            info = Reverse(info,start,end);
+                            //Print(info);
+                        }
+                        break;
+                        
                         
                     default:
                     break;
                 }
             }
             j++;
+            
         }
 
-        info->cursor = info->head->ptr;
-        info->prev = info->head;
-
-        while(info->cursor!=NULL){
-            temp = info->cursor;
-            printf("%c",info->cursor->letter);
-            info->cursor = XOR(info->prev , info->cursor->ptr);
-            info->prev = temp;
-        }
-        printf("\n");
+        Print(info);
         info=genInfo();
         start=genSelection();
         end=genSelection();
