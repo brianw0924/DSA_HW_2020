@@ -8,114 +8,125 @@
 #include <ctype.h>
 
 
-typedef struct doublelinklist{
+typedef struct node{
     char letter;
-    struct doublelinklist *prev;
-    struct doublelinklist *next;
-} DoubleLL;
+    struct node *ptr;
+} Node;
 
-typedef struct {
-    struct doublelinklist *head;
-    struct doublelinklist *tail;
-    struct doublelinklist *cursor;
+Node *XOR(Node *a,Node *b){
+    return (Node*)((unsigned long)(a) ^ (unsigned long)(b));
+}
+
+Node *genNode(char letter){
+    Node *N=(Node*)malloc(sizeof(Node));
+    N->letter=letter;
+    N->ptr=NULL;
+    return N;    
+}
+
+typedef struct{
+    Node *head;
+    Node *tail;
+    Node *cursor;
+    Node *prev;
+    Node *next;
 } Info;
 
-DoubleLL *genDoubleLL(char letter){
-    DoubleLL *DLL = (DoubleLL*)malloc(sizeof(DoubleLL));
-    DLL->letter=letter;
-    DLL->prev=NULL;
-    DLL->next=NULL;
-    return DLL;
+typedef struct{
+    Node *cur;
+    Node *prev;
+    Node *next;
+} Selection;
+
+Selection *genSelection(){
+    Selection *S=(Selection*)malloc(sizeof(Selection));
+    S->cur=NULL;
+    S->prev=NULL;
+    S->next=NULL;
+    return S;
 }
 
 Info *genInfo(){
     Info *I=(Info*)malloc(sizeof(Info));
-    DoubleLL *Begin = genDoubleLL('S');//最左邊設一個不存在的位置,方便cursor指
+    Node *Begin=genNode('S');
     I->head=Begin;
     I->tail=Begin;
     I->cursor=Begin;
+    I->prev=NULL;
+    I->next=NULL;
     return I;
 }
 
-Info *Insert(DoubleLL *new , Info *info){
+Info *Insert(Info *info , Node *new){
+    if(info->cursor == info->tail){//cursor在尾端
+        new->ptr = XOR(info->cursor , NULL);
+        info->cursor->ptr =  XOR((info->cursor->ptr) , new);
 
-    if(info->cursor == info->tail){//cursor在最尾
-        new->prev = info->tail;
-        info->tail->next = new;
+        info->prev = info->cursor;
         info->tail = new;
         info->cursor = new;
-    }else{
-        new->prev = info->cursor;
-        new->next = info->cursor->next;
-        new->next->prev = new;
-        info->cursor->next = new;
+    }
+    else{//cursor在中間
+        
+        new->ptr = XOR(info->cursor,info->next);
+        info->next->ptr = XOR(new , XOR(info->cursor , info->next->ptr));
+        info->cursor->ptr = XOR(info->prev , new);
+
+        info->prev = info->cursor;
         info->cursor = new;
     }
 
     return info;
 }
 
-Info *Overwrite(DoubleLL *new , DoubleLL *selectStart , Info *info , int select){
-    if(select>0){//selectStart -> new -> cursor的next
-        selectStart->next = new;
-        new->prev = selectStart;
+Info *Overwrite(Info *info , Node *new , Selection *start , Selection *end){
 
-        if(info->cursor != info->tail){
-            new->next = info->cursor->next;
-            new->next->prev = new;
-        }else{
-            info->tail = new;
-        }
-    }else if(select<0){//cursor -> new -> selectStart的next
-        info->cursor->next = new;
-        new->prev = info->cursor;
+    new->ptr = XOR(start->cur , end->next);
+    start->cur->ptr = XOR(start->prev , new);
 
-        if(selectStart != info->tail){
-            new->next = selectStart->next;
-            new->next->prev = new;
-        }else{
-            info->tail = new;
-        }
-        
-    }
+    if(end->cur == info->tail)
+        info->tail = new;
+    else
+        end->next->ptr = XOR(new , XOR(end->cur , end->next->ptr));
 
     info->cursor = new;
-
+    info->prev = start->cur;
+    info->next = end->next;
 
     return info;
 }
 
-Info *Delete(DoubleLL *selectStart , Info *info , int select){
-    if(select>0){
-        if(info->cursor == info->tail){
-            selectStart->next = NULL;
-            info->tail = selectStart;
-        }else{
-            selectStart->next = info->cursor->next;
-            selectStart->next->prev = selectStart;
-        }
-        info->cursor = selectStart;
+Info *Delete(Info *info , Selection *start, Selection *end){
+    start->cur->ptr = XOR(start->prev , end->next);
+    if(end->cur == info->tail)
+        info->tail = start->cur;
+    else
+        end->next->ptr = XOR(start->cur , XOR(end->cur , end->next->ptr));
 
-    }else if(select<0){
-        if(selectStart == info->tail){
-            info->cursor->next = NULL;
-            info->tail = info->cursor;
-        }else{
-            info->cursor->next = selectStart->next;
-            info->cursor->next->prev = info->cursor;
-        }
-    }
+    info->prev = start->prev;
+    info->cursor = start->cur;
+    info->next = end->next;
+
     return info;
+
 }
+
+
+
+
 
 int main(void){
     int T;
-    Info *info=genInfo();//head,tail,cursor
     scanf("%d",&T);
+
+    Info *info=genInfo();
+
     char *str=(char*)malloc(sizeof(char)*1000000);
-    int letter,select;
-    DoubleLL *selectStart=NULL;
+
+    int letter;
     bool selectionMode=false;
+    Node *temp;
+    Selection *start=genSelection(),*end=genSelection();
 
     
     for(int i=0;i<T;i++){
@@ -123,43 +134,72 @@ int main(void){
 
         int j=0;
         while(str[j]!='\0'){
-            //printf("%c %d\n",str[j],select);
-            letter=(int)str[j];
+
+            //printf("%c\n",str[j]);
+            
+            letter = (int)str[j];
 
             if (islower(letter)){//a~z
-                DoubleLL *new=genDoubleLL(str[j]);
+                Node *new=genNode(letter);
 
                 if(selectionMode){
-                    if(select!=0)
-                        info=Overwrite(new,selectStart,info,select);
-                    else
-                        info=Insert(new,info);  
-                    selectionMode=!selectionMode;//exit selectionMode
-                }else{
-                    info=Insert(new,info);  
-                }
+                    if(start->cur != end->cur)
+                        info = Overwrite(info,new,start,end);
+                    else 
+                        info = Insert(info,new);
+                    selectionMode=!selectionMode;
+                }else
+                    info = Insert(info,new);
+                
             }else{//指令
 
                 switch (str[j]){
 
                     case 'H'://左移
-
-                        if(info->cursor->letter != 'S'){//不在最頭
-                            info->cursor=info->cursor->prev;
-                            if(selectionMode)
-                                select--;//選取模式往左
+                        temp=info->cursor;
+                        if(info->prev != NULL){//移動
+                            info->next = info->cursor;
+                            info->cursor = info->prev;
+                            info->prev = XOR(info->next , info->cursor->ptr);
                         }
-                        break;
-
-                    case 'L'://右移
-
-                        if(info->cursor != info->tail){
-                                info->cursor=info->cursor->next;
-                                if(selectionMode)
-                                    select++;//選取模式往右
+                        if(selectionMode){
+                            if(temp == start->cur){
+                                start->cur = info->cursor;
+                                start->prev = info->prev;
+                                start->next = info->next;
                             }
+                            else{
+                                end->cur = info->cursor;
+                                end->prev = info->prev;
+                                end->next = info->next;
+                            }
+                        }
+                        
                         break;
+                    case 'L'://右移
+                        temp = info->cursor;
 
+                        if(info->next != NULL){//移動
+                            info->prev = info->cursor;
+                            info->cursor = info->next;
+                            info->next = XOR(info->prev , info->cursor->ptr);
+                        }
+
+
+                        if(selectionMode){
+                            if(temp == end->cur){
+                                end->cur = info->cursor;
+                                end->prev = info->prev;
+                                end->next = info->next;
+                            }
+                            else{
+                                start->cur = info->cursor;
+                                start->prev = info->prev;
+                                start->next = info->next;
+                            }
+                        }
+
+                        break;
                     case 'I'://移到最頭
                         /*info->cursor=NULL;
                         break;*/
@@ -169,24 +209,24 @@ int main(void){
                         break;*/
 
                     case 'V'://SelectionMode
-
-                        if(selectionMode){//原本已經selectionMode,現在要關掉
-                            selectStart=NULL;
+                        if(!selectionMode){
+                            start->cur = info->cursor;
+                            start->prev = info->prev;
+                            start->next = info->next;
+                            end->cur = info->cursor;
+                            end->prev = info->prev;
+                            end->next = info->next;
                         }
-                        else{//原本不在selectionMode,現在要進入
-                            selectStart=info->cursor;
-                            select=0;//紀錄選取的方向
-                        }
-                        selectionMode=!selectionMode;
+                        selectionMode = !selectionMode;
                         break;
-
                     case 'D'://Delete
-                        if(selectionMode && select!=0){
-                            info=Delete(selectStart , info , select);
-                            selectionMode=!selectionMode;
+                        if(selectionMode && start->cur != end->cur){
+                            info = Delete(info,start,end);
+                            selectionMode = !selectionMode;
                         }
                         break;
                     case 'R'://Reverse
+                        
                     default:
                     break;
                 }
@@ -194,13 +234,19 @@ int main(void){
             j++;
         }
 
-        DoubleLL *temp=info->head->next;
-        while(temp!=NULL){
-            printf("%c",temp->letter);
-            temp=temp->next;
+        info->cursor = info->head->ptr;
+        info->prev = info->head;
+
+        while(info->cursor!=NULL){
+            temp = info->cursor;
+            printf("%c",info->cursor->letter);
+            info->cursor = XOR(info->prev , info->cursor->ptr);
+            info->prev = temp;
         }
         printf("\n");
         info=genInfo();
+        start=genSelection();
+        end=genSelection();
 
     }
     
