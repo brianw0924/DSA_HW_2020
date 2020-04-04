@@ -118,9 +118,11 @@ Info *Reverse(Info *info , Selection *start, Selection *end){
     }
 
 
-    if(info->cursor == start->cur)
+
+    //先把cursor,prev,next移動
+    if(info->cursor == start->cur)//cursor停在start
         info->next = end->cur;
-    else{
+    else{//cursor停在end
         info->next = end->next;
         info->cursor = start->next;
         info->prev = XOR(start->cur , start->next->ptr); 
@@ -164,6 +166,7 @@ void Print(Info *info){
         printf("\n");
 }
 
+//MAIN
 
 int main(void){
     int T;
@@ -191,15 +194,19 @@ int main(void){
             letter = (int)str[j];
 
             if (islower(letter)){//a~z
-                Node *new=genNode(letter);
+
+                Node *new=genNode(letter);//產生新的node
 
                 if(selectionMode){
+
                     if(start->cur != end->cur)
                         info = Overwrite(info,new,start,end);
-                    else 
+                    else //沒選取任何東西 直接寫完之後跳出selectionMode
                         info = Insert(info,new);
                     selectionMode=!selectionMode;
+
                 }else
+
                     info = Insert(info,new);
                 
             }else{//指令
@@ -209,45 +216,51 @@ int main(void){
                     case 'H'://左移
 
                         temp=info->cursor;
-                        if(info->prev != NULL){//移動
+
+                        if(info->prev != NULL){//不在最左邊才移動
                             info->next = info->cursor;
                             info->cursor = info->prev;
                             info->prev = XOR(info->next , info->cursor->ptr);
-                        }
-                        if(selectionMode){
-                            if(temp == start->cur){
-                                start->cur = info->cursor;
-                                start->prev = info->prev;
-                                start->next = info->next;
-                            }
-                            else{
-                                end->cur = info->cursor;
-                                end->prev = info->prev;
-                                end->next = info->next;
+                        
+                            if(selectionMode){
+
+                                if(temp == start->cur){
+                                    start->cur = info->cursor;
+                                    start->prev = info->prev;
+                                    start->next = info->next;
+                                }
+                                else{
+                                    end->cur = info->cursor;
+                                    end->prev = info->prev;
+                                    end->next = info->next;
+                                }
+
                             }
                         }
                         
                         break;
                     case 'L'://右移
+
                         temp = info->cursor;
 
                         if(info->next != NULL){//移動
                             info->prev = info->cursor;
                             info->cursor = info->next;
                             info->next = XOR(info->prev , info->cursor->ptr);
-                        }
+                        
+                            if(selectionMode){
 
+                                if(temp == end->cur){
+                                    end->cur = info->cursor;
+                                    end->prev = info->prev;
+                                    end->next = info->next;
+                                }
+                                else{
+                                    start->cur = info->cursor;
+                                    start->prev = info->prev;
+                                    start->next = info->next;
+                                }
 
-                        if(selectionMode){
-                            if(temp == end->cur){
-                                end->cur = info->cursor;
-                                end->prev = info->prev;
-                                end->next = info->next;
-                            }
-                            else{
-                                start->cur = info->cursor;
-                                start->prev = info->prev;
-                                start->next = info->next;
                             }
                         }
 
@@ -274,10 +287,7 @@ int main(void){
                                 end->cur = S_temp->cur;
                                 end->prev = S_temp->prev;
                                 end->next = S_temp->next;
-
                             }
-                            
-
                         }else{
                             info->prev = NULL;
                             info->cursor = info->head;
