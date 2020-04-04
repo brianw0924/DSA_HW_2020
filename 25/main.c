@@ -260,6 +260,8 @@ int main(void){
                                     start->prev = info->prev;
                                     start->next = info->next;
                                 }
+                            //printf("start=%c end=%c\n",start->cur->letter,end->cur->letter);
+                            
 
                             }
                         }
@@ -274,8 +276,15 @@ int main(void){
                                 start->cur = info->cursor;
                                 start->prev = info->prev;
                                 start->next = info->next;
-                            }else{
-                                S_temp = start;
+                            }else if(info->cursor == end->cur){
+                        //printf("BEFORE,cursor=%c start=%c end=%c\n",info->cursor->letter,start->cur->letter,end->cur->letter);
+
+                                S_temp = genSelection();
+                                S_temp->prev = start->prev;
+                                S_temp->cur = start->cur;
+                                S_temp->next = start->next;
+
+                        //printf("BEFORE, S_temp=%c\n",S_temp->cur->letter);
                                 
                                 info->prev = NULL;
                                 info->cursor = info->head;
@@ -284,10 +293,14 @@ int main(void){
                                 start->prev = info->prev;
                                 start->next = info->next;
 
+                        //printf("INITIALLY, start=%c\n",S_temp->cur->letter);
+
+
                                 end->cur = S_temp->cur;
                                 end->prev = S_temp->prev;
                                 end->next = S_temp->next;
                             }
+                        //printf("start=%c end=%c\n",start->cur->letter,end->cur->letter);
                         }else{
                             info->prev = NULL;
                             info->cursor = info->head;
@@ -306,7 +319,10 @@ int main(void){
                                 end->prev = info->prev;
                                 end->next = info->next;
                             }else{
-                                S_temp = end;
+                                S_temp = genSelection();
+                                S_temp->prev = end->prev;
+                                S_temp->cur = end->cur;
+                                S_temp->next = end->next;
                                 
                                 info->next = NULL;
                                 info->cursor = info->tail;
@@ -320,11 +336,13 @@ int main(void){
                                 start->next = S_temp->next;
                                 
                             }
+                        //printf("start=%c end=%c\n",start->cur->letter,end->cur->letter);
                         }else{
                             info->next = NULL;
                             info->cursor = info->tail;
                             info->prev = info->tail->ptr;
                         }
+                        
                         break;
 
                     case 'V'://SelectionMode
