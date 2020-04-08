@@ -36,7 +36,7 @@ int main(void){
     for(int i=0;i<N;i++){
         int len = i+1;
         int j=len;
-        while(kmp[i+j] == j){
+        while(kmp[i+j] == j && (i+j) < N){
             ans[i+j] = len;
             j+=len;
         }
