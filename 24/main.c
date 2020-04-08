@@ -5,61 +5,42 @@
 #include <assert.h>
 #include <string.h>
 
-/*typedef struct{
-    int top;
-    char *str;
-} Stack;
+int *PrefixFunction(char *str, int N){
+    int *arr = (int*)malloc(sizeof(int) * N);
+    arr[0]=0;
+    int k=0;
 
-Stack *genStack(){
-    Stack *S =(Stack*)malloc(sizeof(Stack));
-    S->top = -1;
-    S->str = malloc(sizeof(char)*3000000);
-    return S;
-}*/
-
-
+    for(int q=1;q<N;q++){
+        while(k>0 && str[k] != str[q])
+            k = arr[k-1];
+        if(str[k] == str[q])
+            k++;
+        arr[q] = k;
+    }
+    return arr;
+}
 
 int main(void){
-    char s[3000000], *str=(char*)malloc(sizeof(char)*3000000);
-    scanf("%s",s);
-    int m;
-    scanf("%d",&m);
-    int l,r;
-    scanf("%d%d",&l,&r);
-    int d=r-l+1, cur=0,cmp;
+    int N;
+    scanf("%d",&N);
+    char *str = (char*)malloc(sizeof(char) * N);
+    scanf("%s",str);
+    int *kmp = PrefixFunction(str,N);
+
+
+    int *ans =(int*)malloc(sizeof(int) * N);
+    for(int i=0;i<N;i++)
+        ans[i]=i+1;
+
     
-    strncpy(&str[cur],&s[l-1],d);
-    cur += d;
-    cmp = cur-1;
-    // printf("%s\n",str);
-
-    for(int i=0;i<m-1;i++){
-        scanf("%d%d",&l,&r);
-        // printf("repeat : \n");
-        while(str[cmp] == s[l-1] && (l<r || l==r ) && cmp>-1 ){
-            // printf("cmp=%d l=%d\n",cmp,l);
-            // printf("%c\n",str[cmp]);
-            l++;
-            cmp--;
+    for(int i=0;i<N;i++){
+        int len = i+1;
+        int j=len;
+        while(kmp[i+j] == j){
+            ans[i+j] = len;
+            j+=len;
         }
-            d = r-l+1;
-            strncpy(&str[cur],&s[l-1],d);
-            cur += d;
-            cmp = cur-1;
-
-    // printf("%s\n",str);
-
+        printf("%d: %d\n",i+1,ans[i]);
     }
-    printf("%s\n",str);
-    // char s[20],str[20];
-    // scanf("%s",s);
-    // int top=0 , l1 ,r1;
-    // scanf("%d%d",&l1,&r1);
-    // strncpy(&str[0] , s , r1-l1);
-    // printf("%s",str);
-    // scanf("%s%d%d",s,&l1,&r1);
-    // strncpy(&str[5],s,r1-l1);
-    // printf("%s",str);
-
     return 0;
 }
