@@ -32,11 +32,11 @@ int main(void){
     for(int i=0;i<N;i++)
         ans[i]=i+1;
 
-    
+
     for(int i=0;i<N;i++){
         int len = i+1;
         int j=len;
-        while(kmp[i+j] == j && (i+j) < N){
+        while((i+j) < N && kmp[i+j] == j){
             ans[i+j] = len;
             j+=len;
         }
