@@ -10,23 +10,25 @@ int main() {
     char *str = (char*)malloc(sizeof(char)*1000000);
     scanf("%s",str);
     //hash左邊位數小
-    unsigned long long int *hash=(unsigned long long int*)malloc(sizeof(unsigned long long int)*1000000);
+    unsigned long long int *hash=(unsigned long long int*)malloc(sizeof(unsigned long long int)*strlen(str));
     hash[0] = str[0]-'a';
-    unsigned long long int *table26=(unsigned long long int*)malloc(sizeof(unsigned long long int)*1000000);
-    table26[0]=1;
-    table26[1]=26; 
-    unsigned long long int d = 26;
+    unsigned long long int *table26=(unsigned long long int*)malloc(sizeof(unsigned long long int)*3000000);
+    unsigned long long int d = 1;
+    for(int i=0;i<3000000;i++){
+        table26[i] = d;
+        d*=26;
+    }
 
     int i=1;
     // printf("0 , %llu\n", hash[0]);
     while(str[i]!='\0'){
-        hash[i] = hash[i-1] + d*(str[i]-'a');
+        hash[i] = hash[i-1] + table26[i]*(str[i]-'a');
         // printf("%d , %llu\n", i,hash[i]);
         i++;
-        d*=26;
-        table26[i] = d ;
+        // table26[i] = d ;
         // printf("%d , table26 = %llu\n",i,table26[i]);
     }
+
 
     int m;
     scanf("%d",&m);
