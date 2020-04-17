@@ -42,7 +42,7 @@ int main() {
 
 
     //ansHash 右邊位數小
-    unsigned long long int *ansHash=(unsigned long long int*)malloc(sizeof(unsigned long long int)*1000000);
+    unsigned long long int *ansHash=(unsigned long long int*)malloc(sizeof(unsigned long long int)*3000000);
     //先處理第一個進來的substring
     ansHash[0] =str[l] - 'a';
     int len = r-l+1;
@@ -68,13 +68,26 @@ int main() {
 
             unsigned long long int cmpans = ansHash[last];
             int j=0,tempr=l+last;
-            while( (tempr>(l-1) && ((hash[tempr]-hash[l-1]) != cmpans*table26[l]))){
-                // printf("tempr = %d ",tempr);
-                // printf("hash[%c] cmp=%llu vs ",ans[j],cmpans*table26[l]);
-                // printf("hash[%c] %llu\n",str[tempr],(hash[tempr]-hash[l-1]));
-                cmpans =ansHash[last] - ansHash[j]*table26[last-j];
-                j++;
-                tempr--;
+
+            if(l == 0){
+                while( (tempr>(l-1) && (hash[tempr] != cmpans))){
+                    // printf("%d , ",j);
+                    // printf("tempr = %d ",tempr);
+                    // printf("hash[%c] cmp=%llu vs ",ans[j],cmpans*table26[l]);
+                    // printf("hash[%c] %llu\n",str[tempr],(hash[tempr]-hash[l-1]));
+                    cmpans =ansHash[last] - ansHash[j]*table26[last-j];
+                    j++;
+                    tempr--;
+                }
+            }else{
+                while( (tempr>(l-1) && ((hash[tempr]-hash[l-1]) != cmpans*table26[l]))){
+                    // printf("tempr = %d ",tempr);
+                    // printf("hash[%c] cmp=%llu vs ",ans[j],cmpans*table26[l]);
+                    // printf("hash[%c] %llu\n",str[tempr],(hash[tempr]-hash[l-1]));
+                    cmpans =ansHash[last] - ansHash[j]*table26[last-j];
+                    j++;
+                    tempr--;
+                }
             }
             // printf("tempr = %d ",tempr);
             // printf("ansHhash[%c] cmp=%llu vs ",ans[j],cmpans*table26[l]);
@@ -95,15 +108,25 @@ int main() {
             int j=last-len,tempr=r;
             // printf("l=%d j=%d tempr=%d\n",l,j,tempr);
             // while(tempr>(l-1)){
-
-            while( (tempr>(l-1)) && ((hash[tempr]-hash[l-1]) != ((ansHash[last] - ansHash[j]*table26[last-j])*table26[l]) )){
-                // printf("%d\n",j);
-                // printf("tempr = %d ",tempr);
-                // printf("ansHash[%c] %llu vs ",ans[j+1],(ansHash[last] - ansHash[j]*table26[last-j])*table26[l]);
-                // printf("hash[%c] %llu\n",str[tempr],(hash[tempr]-hash[l-1]));
-                // printf("%llu\n",(hash[r]-hash[l-1])/table26[l]);
-                j++;
-                tempr--;
+            if(l == 0){
+                while( (tempr>(l-1)) && (hash[tempr] != (ansHash[last] - ansHash[j]*table26[last-j]) )){
+                    // printf("%d , ",j);
+                    // printf("tempr = %d ",tempr);
+                    // printf("hash[%c] cmp=%llu vs ",ans[j],cmpans*table26[l]);
+                    // printf("hash[%c] %llu\n",str[tempr],(hash[tempr]-hash[l-1]));
+                    j++;
+                    tempr--;
+                }
+            }else{
+                while( (tempr>(l-1)) && ((hash[tempr]-hash[l-1]) != ((ansHash[last] - ansHash[j]*table26[last-j])*table26[l]) )){
+                    // printf("%d\n",j);
+                    // printf("tempr = %d ",tempr);
+                    // printf("ansHash[%c] %llu vs ",ans[j+1],(ansHash[last] - ansHash[j]*table26[last-j])*table26[l]);
+                    // printf("hash[%c] %llu\n",str[tempr],(hash[tempr]-hash[l-1]));
+                    // printf("%llu\n",(hash[r]-hash[l-1])/table26[l]);
+                    j++;
+                    tempr--;
+            }
             }
             // printf("hash[%c] %llu vs ",ans[j],(ansHash[last] - ansHash[j]*table26[last-j])*table26[l]);
             // printf("hash[%c] %llu\n",str[tempr],(hash[tempr]-hash[l-1]));
@@ -128,14 +151,27 @@ int main() {
             int j=0,tempr=r;
             // printf("%llu\n",(hash[r]-hash[l-1])/table26[l]);
             // printf("l=%d\n",l);
-            while( (tempr>(l-1) && ((hash[tempr]-hash[l-1]) != cmpans*table26[l]))){
-                // printf("%d , ",j);
-                // printf("tempr = %d ",tempr);
-                // printf("hash[%c] cmp=%llu vs ",ans[j],cmpans*table26[l]);
-                // printf("hash[%c] %llu\n",str[tempr],(hash[tempr]-hash[l-1]));
-                cmpans =ansHash[last] - ansHash[j]*table26[last-j];
-                j++;
-                tempr--;
+            if(l == 0){
+                while( tempr>(l-1) && (hash[tempr] != cmpans)){
+                    // printf("%d , ",j);
+                    // printf("tempr = %d ",tempr);
+                    // printf("hash[%c] cmp=%llu vs ",ans[j],cmpans*table26[l]);
+                    // printf("hash[%c] %llu\n",str[tempr],(hash[tempr]-hash[l-1]));
+                    cmpans =ansHash[last] - ansHash[j]*table26[last-j];
+                    j++;
+                    tempr--;
+                }
+            }else{
+
+                while( (tempr>(l-1) && ((hash[tempr]-hash[l-1]) != cmpans*table26[l]))){
+                    // printf("%d , ",j);
+                    // printf("tempr = %d ",tempr);
+                    // printf("hash[%c] cmp=%llu vs ",ans[j],cmpans*table26[l]);
+                    // printf("hash[%c] %llu\n",str[tempr],(hash[tempr]-hash[l-1]));
+                    cmpans =ansHash[last] - ansHash[j]*table26[last-j];
+                    j++;
+                    tempr--;
+                }
             }
             // printf("tempr = %d ",tempr);
             // printf("ansHash[%c] cmp=%llu vs ",ans[j],cmpans*table26[l]);
@@ -148,7 +184,9 @@ int main() {
                 last++;
                 // printf("ansHash = %d , %llu\n", last ,ansHash[last]);
             }
+            
             // printf("%s\n\n",ans);
+            
         }
     }
         printf("%s\n",ans);
