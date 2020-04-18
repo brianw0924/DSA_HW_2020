@@ -9,7 +9,8 @@
 int main() {
     char *str = (char*)malloc(sizeof(char)*1000005);
     scanf("%s",str);
-    unsigned long long int *hash=(unsigned long long int*)malloc(sizeof(unsigned long long int)*strlen(str));
+    
+    unsigned long long int *hash=(unsigned long long int*)malloc(sizeof(unsigned long long int)*1000005);
     unsigned long long int *table26=(unsigned long long int*)malloc(sizeof(unsigned long long int)*3000005);
 
     unsigned long long int d = 1;
