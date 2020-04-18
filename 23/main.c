@@ -7,13 +7,13 @@
 #include <time.h>
 
 int main() {
-    char *str = (char*)malloc(sizeof(char)*1000001);
+    char *str = (char*)malloc(sizeof(char)*1000005);
     scanf("%s",str);
     unsigned long long int *hash=(unsigned long long int*)malloc(sizeof(unsigned long long int)*strlen(str));
-    unsigned long long int *table26=(unsigned long long int*)malloc(sizeof(unsigned long long int)*3000000);
+    unsigned long long int *table26=(unsigned long long int*)malloc(sizeof(unsigned long long int)*3000005);
 
     unsigned long long int d = 1;
-    for(int i=0;i<3000000;i++){//26次方table
+    for(int i=0;i<3000005;i++){//26次方table
         table26[i] = d;
         d*=26;
     }
@@ -30,7 +30,7 @@ int main() {
     scanf("%d",&m);
     
     int l,r;
-    char *ans = (char*)malloc(sizeof(char)*3000001);
+    char *ans = (char*)malloc(sizeof(char)*3000005);
 
     scanf("%d%d",&l,&r);
     r--;
@@ -38,7 +38,7 @@ int main() {
 
 
     //ansHash 右邊位數小
-    unsigned long long int *ansHash=(unsigned long long int*)malloc(sizeof(unsigned long long int)*3000000);
+    unsigned long long int *ansHash=(unsigned long long int*)malloc(sizeof(unsigned long long int)*3000005);
     //先處理第一個進來的substring
     ansHash[0] =str[l] - 'a';
     int len = r-l+1;
