@@ -5,147 +5,89 @@
 #include <assert.h>
 #include <string.h>
 #include <time.h>
+    char str[1000002],ans[3000002];
+    unsigned long long hash[1000002], ansHash[3000002], table26[1000002];
+
 
 int main() {
-    char *str = (char*)malloc(sizeof(char)*1000002);
     scanf("%s",str);
-    int n=strlen(str);
+    int n = strlen(str);
 
-    unsigned long long *hash=(unsigned long long*)malloc(sizeof(unsigned long long)*1000002);
-    unsigned long long *table26=(unsigned long long*)malloc(sizeof(unsigned long long)*3000002);
+    hash[n-1] = str[n-1] - 'a';
+    for(int i=n-2;i>=0;i--)
+        hash[i] = hash[i+1]*26 + (str[i] - 'a');
 
-    unsigned long long d = 1;
-    for(int i=0;i<n;i++){//26次方table
-        table26[i] = d;
-        // printf("%llu\n",table26[i]);
-        d*=26;
-    }
-
-    int i=1;
-    hash[0] = str[0]-'a';
-    while(str[i]!='\0'){//題目字串的hash table, 左邊位數小
-        hash[i] = hash[i-1] + table26[i]*(str[i]-'a');
-        // printf("%llu\n",hash[i]);
-        i++;
-    }
-
-
-    int m;
+    table26[0]=1;
+    for(int i=1;i<n;i++)
+        table26[i]=table26[i-1]*26;
+    
+    int m;//讀幾次
     scanf("%d",&m);
-    
-    int l,r;
-    char *ans = (char*)malloc(sizeof(char)*3000002);
-
+    int r,l,last;
     scanf("%d%d",&l,&r);
+    l--;//讓index從0開始
     r--;
-    l--;
-
-
-    //ansHash 右邊位數小
-    unsigned long long *ansHash=(unsigned long long*)malloc(sizeof(unsigned long long)*3000002);
-    //先處理第一個進來的substring
-    ansHash[0] =str[l] - 'a';
     int len = r-l+1;
-    int last=(len-1);//目前ans[]最後一個字元的index
-    strncpy(&ans[0],&str[l],len);
-    for(int i=1;i<len;i++){//建output的hash
-        ansHash[i] = ansHash[i-1]*26 + (str[l+i]-'a');
-    }
-    // printf("\n");
+    last = len-1;
+    //先處理第一個進來的字串
+    strncpy(ans,&str[l],len);
+    ansHash[0]=ans[0]-'a';
+    for(int i=1;i<len;i++)
+        ansHash[i] = ansHash[i-1]*26 + (ans[i] - 'a');
     
 
+    n--;//n現在是str[]的最後一個字元之index
     for(int i=1;i<m;i++){
         scanf("%d%d",&l,&r);
-        r--;
         l--;
-        len = r-l+1;
-        
-        //開始比較需要消除的部分
+        r--;
+        int len = r-l+1;
+        if(len < (last+1)){//新進來的substring比較短
+            int j = last - len; //j指在要被刪除的地方
+            int tempr = r;
 
-        if((last+1) < len){//新進來的substring比較長
+            unsigned long long cmpans = ansHash[last] - ansHash[j]*table26[last-j];
+            unsigned long long cmpnew = hash[l] - hash[tempr+1]*table26[tempr-l+1];
 
-            unsigned long long cmpans = ansHash[last];//output字串的hash
-            int j=0,tempr=l+last;
-
-            if(l == 0){
-                while( (tempr>(l-1) && (hash[tempr] != cmpans))){
-                    cmpans =ansHash[last] - ansHash[j]*table26[last-j];
+                for(int k=0;k<len && cmpans != cmpnew ;k++){
                     j++;
                     tempr--;
-                }
-            }else{
-                while( (tempr>(l-1) && ((hash[tempr]-hash[l-1]) != cmpans*table26[l]))){
                     cmpans = ansHash[last] - ansHash[j]*table26[last-j];
-                    j++;
-                    tempr--;
+                    cmpnew = hash[l] - hash[tempr+1]*table26[tempr-l+1];
                 }
+                int cpylen = r -tempr;
+                strncpy(&ans[last+1] , &str[tempr+1] , cpylen);
+                //更新ansHash
+                for(int k=0;k<cpylen;k++){
+                    ansHash[last+1] = ansHash[last]*26 + (str[tempr+1+k] -'a');
+                    last++;
+                }
+            
+        }else{//新進來的substring比較長 or 一樣長
+            int tempr = l+last;
+            int j = -1;
+            unsigned long long cmpans = ansHash[last] - ansHash[j]*table26[last-j];
+            unsigned long long cmpnew = hash[l] - hash[tempr+1]*table26[tempr-l+1];
+
+            for(int k=0;k<(last+1) && cmpans != cmpnew;k++){
+                j++;
+                tempr--;
+                cmpans = ansHash[last] - ansHash[j]*table26[last-j];
+                cmpnew = hash[l] - hash[tempr+1]*table26[tempr-l+1];
             }
-
-            strncpy(&ans[last+1],&str[tempr+1],r-tempr);
-
-            for(int k=0;k<(r-tempr);k++){//output的hash值更新
-                ansHash[last+1] = ansHash[last]*26 + (str[tempr+k+1]-'a');
+            int cpylen = r -tempr;
+            strncpy(&ans[last+1] , &str[tempr+1] , cpylen);
+            //更新ansHash
+            for(int k=0;k<cpylen;k++){
+                ansHash[last+1] = ansHash[last]*26 + (str[tempr+1+k] -'a');
                 last++;
             }
 
-
-        }else if ((last+1) > len){//目前output比較長
-
-            int j=last-len,tempr=r;
-            unsigned long long cmpans = ansHash[last] - ansHash[j]*table26[last-j];//output字串的hash
-
-            if(l == 0){
-                while( (tempr>(l-1)) && (hash[tempr] != cmpans )){
-                    j++;
-                    cmpans = ansHash[last] - ansHash[j]*table26[last-j];
-                    tempr--;
-                }
-            }else{
-                while( (tempr>(l-1)) && ((hash[tempr]-hash[l-1]) != (cmpans*table26[l]) )){
-                    j++;
-                    cmpans = ansHash[last] - ansHash[j]*table26[last-j];
-                    tempr--;
-                }
-            }
-
-
-            strncpy(&ans[last+1],&str[tempr+1],r-tempr);
-            
-            for(int k=0;k<(r-tempr);k++){
-                ansHash[last+1] = ansHash[last]*26 + (str[tempr+k+1]-'a');
-                last++;
-            }
-
-        }else{//一樣長
-
-            unsigned long long cmpans = ansHash[last];
-            int j=0,tempr=r;
-            if(l == 0){
-                while( tempr>(l-1) && (hash[tempr] != cmpans)){
-                    cmpans =ansHash[last] - ansHash[j]*table26[last-j];
-                    j++;
-                    tempr--;
-                }
-            }else{
-
-                while( (tempr>(l-1) && ((hash[tempr]-hash[l-1]) != cmpans*table26[l]))){
-                    cmpans =ansHash[last] - ansHash[j]*table26[last-j];
-                    j++;
-                    tempr--;
-                }
-            }
-
-            strncpy(&ans[last+1],&str[tempr+1],r-tempr);
-            for(int k=0;k<(r-tempr);k++){
-                ansHash[last+1] = ansHash[last]*26 + (str[tempr+k+1]-'a');
-                last++;
-            }
-            
-            // printf("%s\n\n",ans);
-            
         }
     }
-        ans[last+1] = '\0';
+
+
+    
         printf("%s\n",ans);
 
 
