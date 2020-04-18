@@ -145,6 +145,7 @@ int main() {
             
         }
     }
+        ans[last+1] = '\0';
         printf("%s\n",ans);
 
 
