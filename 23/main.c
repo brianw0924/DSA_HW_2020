@@ -7,15 +7,17 @@
 #include <time.h>
 
 int main() {
-    char *str = (char*)malloc(sizeof(char)*1000005);
+    char *str = (char*)malloc(sizeof(char)*1000002);
     scanf("%s",str);
-    
-    unsigned long long int *hash=(unsigned long long int*)malloc(sizeof(unsigned long long int)*1000005);
-    unsigned long long int *table26=(unsigned long long int*)malloc(sizeof(unsigned long long int)*3000005);
+    int n=strlen(str);
 
-    unsigned long long int d = 1;
-    for(int i=0;i<3000005;i++){//26次方table
+    unsigned long long *hash=(unsigned long long*)malloc(sizeof(unsigned long long)*1000002);
+    unsigned long long *table26=(unsigned long long*)malloc(sizeof(unsigned long long)*3000002);
+
+    unsigned long long d = 1;
+    for(int i=0;i<n;i++){//26次方table
         table26[i] = d;
+        // printf("%llu\n",table26[i]);
         d*=26;
     }
 
@@ -23,6 +25,7 @@ int main() {
     hash[0] = str[0]-'a';
     while(str[i]!='\0'){//題目字串的hash table, 左邊位數小
         hash[i] = hash[i-1] + table26[i]*(str[i]-'a');
+        // printf("%llu\n",hash[i]);
         i++;
     }
 
@@ -31,7 +34,7 @@ int main() {
     scanf("%d",&m);
     
     int l,r;
-    char *ans = (char*)malloc(sizeof(char)*3000005);
+    char *ans = (char*)malloc(sizeof(char)*3000002);
 
     scanf("%d%d",&l,&r);
     r--;
@@ -39,7 +42,7 @@ int main() {
 
 
     //ansHash 右邊位數小
-    unsigned long long int *ansHash=(unsigned long long int*)malloc(sizeof(unsigned long long int)*3000005);
+    unsigned long long *ansHash=(unsigned long long*)malloc(sizeof(unsigned long long)*3000002);
     //先處理第一個進來的substring
     ansHash[0] =str[l] - 'a';
     int len = r-l+1;
@@ -61,7 +64,7 @@ int main() {
 
         if((last+1) < len){//新進來的substring比較長
 
-            unsigned long long int cmpans = ansHash[last];//output字串的hash
+            unsigned long long cmpans = ansHash[last];//output字串的hash
             int j=0,tempr=l+last;
 
             if(l == 0){
@@ -89,7 +92,7 @@ int main() {
         }else if ((last+1) > len){//目前output比較長
 
             int j=last-len,tempr=r;
-            unsigned long long int cmpans = ansHash[last] - ansHash[j]*table26[last-j];//output字串的hash
+            unsigned long long cmpans = ansHash[last] - ansHash[j]*table26[last-j];//output字串的hash
 
             if(l == 0){
                 while( (tempr>(l-1)) && (hash[tempr] != cmpans )){
@@ -115,7 +118,7 @@ int main() {
 
         }else{//一樣長
 
-            unsigned long long int cmpans = ansHash[last];
+            unsigned long long cmpans = ansHash[last];
             int j=0,tempr=r;
             if(l == 0){
                 while( tempr>(l-1) && (hash[tempr] != cmpans)){
