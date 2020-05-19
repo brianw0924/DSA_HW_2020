@@ -31,6 +31,8 @@ Node *getVirus(){
 
 Node *FindVirus(Node *p){
     Node *temp = p;
+    if(temp == NULL)
+        return NULL;
     
     while(temp->next != temp){
         temp = temp->next;
