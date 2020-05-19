@@ -40,17 +40,20 @@ Node *FindVirus(Node *p){
     return temp;
 }
 
+char s[10];
+Node *people[1000002];
+Node *virusIndex[1000002];
 
 int main() {
     int N,M;
     scanf("%d%d",&N,&M);
-    char s[10];
     int p,q,v;
+    // char s[10];
     int nextVirus=1;
 
     //Make_set
-    Node **people =(Node**)malloc(sizeof(Node*)*(N+1));
-    Node **virusIndex =(Node**)malloc(sizeof(Node*)*(M+1));
+    // Node **people =(Node**)malloc(sizeof(Node*)*(N+1));
+    // Node **virusIndex =(Node**)malloc(sizeof(Node*)*(M+1));
     for(int j=1;j<M+1;j++){
         virusIndex[j] = getVirus();
         virusIndex[j]->virus = j;
