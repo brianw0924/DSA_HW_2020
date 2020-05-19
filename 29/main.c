@@ -42,7 +42,7 @@ Node *FindVirus(Node *p){
     return temp;
 }
 
-char s[10];
+char s[3];
 Node *people[1000002];
 Node *virusIndex[1000002];
 
