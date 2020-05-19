@@ -31,11 +31,12 @@ Node *getVirus(){
 
 Node *FindVirus(Node *p){
     Node *temp = p;
-    if(temp->next == NULL)
-        return NULL;
     
-    while(temp->next != temp)
+    while(temp->next != temp){
         temp = temp->next;
+        if(temp == NULL)
+            break;
+    }
     return temp;
 }
 
@@ -43,18 +44,17 @@ Node *FindVirus(Node *p){
 int main() {
     int N,M;
     scanf("%d%d",&N,&M);
-    char s[2];
+    char s[10];
     int p,q,v;
     int nextVirus=1;
 
     //Make_set
     Node **people =(Node**)malloc(sizeof(Node*)*(N+1));
     Node **virusIndex =(Node**)malloc(sizeof(Node*)*(M+1));
-    int j=1;
-    for(j=1;j<M+1;j++){
+    for(int j=1;j<M+1;j++){
         virusIndex[j] = getVirus();
         virusIndex[j]->virus = j;
-        // printf("%d\n",virusIndex[i]->virus);
+        // printf("%d\n",virusIndex[j]->virus);
     }
 
     for(int i=1;i<N+1;i++){
@@ -76,25 +76,20 @@ int main() {
 
         switch(s[0]){
             case 'w'://感染
-                // printf("test\n");
                 scanf("%d",&p);
-                // printf("p = %d\n",p);
+                // printf("%d\n",p);
                 Node *root = FindVirus(people[p]);
                 if(root){
-                    // printf("test\n");
                     root->count--;
                 }
-                // printf("%d\n",nextVirus);
                 people[p]->next = virusIndex[nextVirus];
-                // printf("%d\n",virusIndex[nextVirus]->virus);
                 virusIndex[nextVirus]->count++;
-                // printf("%d\n",virusIndex[nextVirus]->virus);
-                // printf("type %d has %d\n",nextVirus,virusIndex[nextVirus]->count);
                 nextVirus++;
                 break;
 
             case 'u'://傳染
                 scanf("%d%d",&p,&q);
+                // printf("%d %d\n",p,q);
                 Node *root_p = FindVirus(people[p]), *root_q = FindVirus(people[q]);
                 if(root_p && !root_q){//p感染q
                     root_p->count++;
@@ -117,6 +112,7 @@ int main() {
 
             case 'h'://治癒
                 scanf("%d",&p);
+                // printf("%d\n",p);
                 if(people[p]->next != NULL){
                     Node *root = FindVirus(people[p]);
                     root->count--;
@@ -126,6 +122,7 @@ int main() {
                 
             case 'a'://印出感染virus種類
                 scanf("%d",&p);
+                // printf("%d\n",p);
                 if(people[p]->next == NULL)
                     printf("%d\n",0);
                 else{
@@ -136,6 +133,7 @@ int main() {
 
             case 'n'://印出感染該virus的人數
                 scanf("%d",&v);
+                // printf("%d\n",v);
                 printf("%d\n",virusIndex[v]->count);
                 break;
         }
