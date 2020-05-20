@@ -61,7 +61,7 @@ int main() {
     // Make_set
     // Node **people =(Node**)malloc(sizeof(Node*)*(N+1));
     // Node **virusIndex =(Node**)malloc(sizeof(Node*)*(M+1));
-    for(int j=1;j<(M+1);j++){
+    for(int j=1;j<1000003;j++){
         virusIndex[j] = getVirus();
         virusIndex[j]->virus = j;
         // printf("%d\n",virusIndex[j]->virus);
@@ -144,10 +144,7 @@ int main() {
             case 'n'://印出感染該virus的人數
                 scanf("%d",&v);
                 // printf("%d\n",v);
-                if(v>M)
-                    printf("%d\n",0);
-                else
-                    printf("%d\n",virusIndex[v]->count);
+                printf("%d\n",virusIndex[v]->count);
                 break;
         }
     }
