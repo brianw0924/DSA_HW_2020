@@ -92,7 +92,7 @@ int main() {
                 nextVirus++;
                 break;
 
-            case 'u'://傳染
+            case 'u'://傳染(BUG)
                 scanf("%d%d",&p,&q);
                 // printf("%d %d\n",p,q);
                 Node *root_p = FindVirus(people[p]), *root_q = FindVirus(people[q]);
@@ -102,7 +102,7 @@ int main() {
                 }else if(!root_p && root_q){//q感染p
                     root_q->count++;
                     people[p]->next = root_q;
-                }else{//p,q都有感染
+                }else if(root_p && root_q){//p,q都有感染
                     if(root_p->virus > root_q->virus){//p比較新
                         root_p->count+=root_q->count;
                         root_q->count = 0;
@@ -127,20 +127,19 @@ int main() {
                 
             case 'a'://印出感染virus種類
                 scanf("%d",&p);
-                printf("%d\n",1);
-                // // printf("%d\n",p);
-                // if(people[p]->next == NULL)
-                //     printf("%d\n",0);
-                // else{
-                //     Node *root = FindVirus(people[p]);
-                //     printf("%d\n",root->virus);
-                // }
+                // printf("%d\n",p);
+                if(people[p]->next == NULL)
+                    printf("%d\n",0);
+                else{
+                    Node *root = FindVirus(people[p]);
+                    printf("%d\n",root->virus);
+                }
                 break;
 
             case 'n'://印出感染該virus的人數 (BUG)
                 scanf("%d",&v);
-                printf("%d\n",v);
-                // printf("%d\n",virusIndex[v]->count);
+                // printf("%d\n",v);
+                printf("%d\n",virusIndex[v]->count);
                 break;
         }
     }
