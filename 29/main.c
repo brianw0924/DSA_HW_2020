@@ -47,21 +47,21 @@ Node *FindVirus(Node *p){
     // return temp;
 }
 
-char s[3];
-Node *people[1000002];
-Node *virusIndex[1000002];
+// char s[3];
+// Node *people[1000002];
+// Node *virusIndex[1000002];
 
 int main() {
     int N,M;
     scanf("%d%d",&N,&M);
     int p,q,v;
-    // char s[10];
+    char s[3];
     int nextVirus=1;
 
-    //Make_set
-    // Node **people =(Node**)malloc(sizeof(Node*)*(N+1));
-    // Node **virusIndex =(Node**)malloc(sizeof(Node*)*(M+1));
-    for(int j=1;j<1000003;j++){
+    // Make_set
+    Node **people =(Node**)malloc(sizeof(Node*)*(N+1));
+    Node **virusIndex =(Node**)malloc(sizeof(Node*)*(M+1));
+    for(int j=1;j<(M+1);j++){
         virusIndex[j] = getVirus();
         virusIndex[j]->virus = j;
         // printf("%d\n",virusIndex[j]->virus);
@@ -141,10 +141,13 @@ int main() {
                 }
                 break;
 
-            case 'n'://印出感染該virus的人數 (BUG)
+            case 'n'://印出感染該virus的人數
                 scanf("%d",&v);
                 // printf("%d\n",v);
-                printf("%d\n",virusIndex[v]->count);
+                if(v>M)
+                    printf("%d\n",0);
+                else
+                    printf("%d\n",virusIndex[v]->count);
                 break;
         }
     }
