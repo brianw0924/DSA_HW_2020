@@ -82,14 +82,14 @@ int main() {
         switch(s[0]){
             case 'w'://感染
                 scanf("%d",&p);
-                // // printf("%d\n",p);
-                // Node *root = FindVirus(people[p]);
-                // if(root){
-                //     root->count--;
-                // }
-                // people[p]->next = virusIndex[nextVirus];
-                // virusIndex[nextVirus]->count++;
-                // nextVirus++;
+                // printf("%d\n",p);
+                Node *root = FindVirus(people[p]);
+                if(root){
+                    root->count--;
+                }
+                people[p]->next = virusIndex[nextVirus];
+                virusIndex[nextVirus]->count++;
+                nextVirus++;
                 break;
 
             case 'u'://傳染
@@ -139,8 +139,8 @@ int main() {
 
             case 'n'://印出感染該virus的人數
                 scanf("%d",&v);
-                // printf("%d\n",v);
-                printf("%d\n",virusIndex[v]->count);
+                printf("%d\n",v);
+                // printf("%d\n",virusIndex[v]->count);
                 break;
         }
     }
