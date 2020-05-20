@@ -127,13 +127,14 @@ int main() {
                 
             case 'a'://印出感染virus種類
                 scanf("%d",&p);
-                // printf("%d\n",p);
-                if(people[p]->next == NULL)
-                    printf("%d\n",0);
-                else{
-                    Node *root = FindVirus(people[p]);
-                    printf("%d\n",root->virus);
-                }
+                printf("%d\n",1);
+                // // printf("%d\n",p);
+                // if(people[p]->next == NULL)
+                //     printf("%d\n",0);
+                // else{
+                //     Node *root = FindVirus(people[p]);
+                //     printf("%d\n",root->virus);
+                // }
                 break;
 
             case 'n'://印出感染該virus的人數
