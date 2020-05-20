@@ -56,7 +56,7 @@ int main() {
     //Make_set
     // Node **people =(Node**)malloc(sizeof(Node*)*(N+1));
     // Node **virusIndex =(Node**)malloc(sizeof(Node*)*(M+1));
-    for(int j=1;j<M+1;j++){
+    for(int j=1;j<1000003;j++){
         virusIndex[j] = getVirus();
         virusIndex[j]->virus = j;
         // printf("%d\n",virusIndex[j]->virus);
