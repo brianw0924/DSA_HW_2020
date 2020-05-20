@@ -30,16 +30,21 @@ Node *getVirus(){
 }
 
 Node *FindVirus(Node *p){
-    Node *temp = p;
-    if(temp == NULL)
+    if(p == NULL)
         return NULL;
+    if(p != p->next)
+        p->next = FindVirus(p->next);
+    return p->next;
+    // Node *temp = p;
+    // if(temp == NULL)
+    //     return NULL;
     
-    while(temp->next != temp){
-        temp = temp->next;
-        if(temp == NULL)
-            break;
-    }
-    return temp;
+    // while(temp->next != temp){
+    //     temp = temp->next;
+    //     if(temp == NULL)
+    //         break;
+    // }
+    // return temp;
 }
 
 char s[3];
