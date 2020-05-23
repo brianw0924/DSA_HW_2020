@@ -9,7 +9,7 @@
 #include "akihabara.h"
 
 int Array[50000000];
-int main() {
+int main(){
     unsigned int N = getN();
     long long int K = getK();
     getArray(N, Array);
@@ -20,6 +20,11 @@ int main() {
     hash[0] = 0;
     hash[1] = Array[0];
     int i;
+
+    if(N>100000){
+
+
+
     for(i=2;i<(N+1);i++){
         hash[i] = hash[i-1] + Array[i-1];
         if(Array[i-2]<0){
@@ -63,4 +68,31 @@ int main() {
         r=l+1;
     }
     printf("%d\n",count);
-}
+    }else{
+        for(i=2;i<(N+1);i++)
+            hash[i] = hash[i-1] + Array[i-1];
+        // printf("%llu ",hash[i-1]);
+    }
+    // printf("%llu\n",hash[N]);
+    // for(int k=0;k<N;k++)
+    //     printf("nextNegative=%d\n",nextNegative[k]);
+    // for(int k=0;k<N;k++)
+    //     printf("%llu ",hash[k]);
+    // printf("%llu\n",hash[N]);
+
+    
+    int l=0,r=1;
+    while(l<N){
+        // printf("l = %d\n",l);
+        while(r<(N+1)){
+            // printf("current l = %d, r = %d\n",l,r);
+            if(hash[r]-hash[l] == K)
+                count++;
+            r++;
+        }
+        l++;
+        r=l+1;
+    }
+    printf("%d\n",count);
+
+    }
