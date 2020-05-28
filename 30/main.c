@@ -9,7 +9,7 @@
 #include "akihabara.h"
 
 
-int hashSize = 2181271;//mod多少
+long long int hashSize = 517619;//mod多少
 
 typedef struct node{
     long long int key;
@@ -25,8 +25,8 @@ Node *getNode(){
     return N;
 }
 
-void hash(Node **Hash, int key){
-    int hashValue=key%hashSize;
+void hash(Node **Hash, long long int key){
+    long long int hashValue=key%hashSize;
     Node *temp = Hash[hashValue];
     if(temp->count == 0){//空櫃子
         temp->count++;
@@ -48,14 +48,14 @@ void hash(Node **Hash, int key){
     }
 }
 
-void init(Node **Hash, int size){
+void init(Node **Hash, long long int size){
     for(int i=0;i<size;i++){
         Hash[i] = getNode();
     }
 }
 
-int findTargetCount(Node **Hash, int target){
-    int hashValue = target%hashSize;
+int findTargetCount(Node **Hash, long long int target){
+    long long int hashValue = target%hashSize;
     Node *temp = Hash[hashValue];
     if(temp->count == 0){//這格是空的
         return 0;
@@ -91,7 +91,7 @@ int main(){
 
 
     for(int i=0;i<N;i++){
-        int target = Sum[i]-K;
+        long long int target = Sum[i]-K;
 
         //找區間和=K
         if(target<0){
@@ -106,7 +106,7 @@ int main(){
 
         //處理key,Hash
         if(Sum[i]<0){
-            int temp = -Sum[i];
+            long long int temp = -Sum[i];
             hash(negative_Hash, temp);
         }else{//Sum[i]>=0
             hash(positive_Hash, Sum[i]);
