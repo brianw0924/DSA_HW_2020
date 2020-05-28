@@ -9,7 +9,7 @@
 #include "akihabara.h"
 
 
-int hashSize = 10000000;//mod多少
+int hashSize = 2181271;//mod多少
 
 typedef struct node{
     long long int key;
