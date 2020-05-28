@@ -9,7 +9,7 @@
 #include "akihabara.h"
 
 
-int hashSize = 1000000;//mod多少
+int hashSize = 10000000;//mod多少
 
 typedef struct node{
     long long int key;
@@ -57,11 +57,11 @@ void init(Node **Hash, int size){
 int findTargetCount(Node **Hash, int target){
     int hashValue = target%hashSize;
     Node *temp = Hash[hashValue];
-    if(temp->count == 0){
+    if(temp->count == 0){//這格是空的
         return 0;
     }
-    else{
-        while(temp->key != target)
+    else{//這格至少有一個東西
+        while(temp && (temp->key != target))
             temp = temp->next;
         if(temp == NULL)
             return 0;
