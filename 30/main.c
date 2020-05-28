@@ -8,6 +8,7 @@
 #include <time.h>
 #include "akihabara.h"
 
+
 int hashSize = 1000000;//mod多少
 
 typedef struct node{
@@ -31,8 +32,8 @@ void hash(Node **Hash, int key){
         temp->count++;
         temp->key = key;
     }else{//Chaining
-        Node *prev=NULL;
-        while(temp->key != key){
+        Node *prev=temp;
+        while(temp && (temp->key != key)){
             prev = temp;
             temp = temp->next;
         }
@@ -49,7 +50,6 @@ void hash(Node **Hash, int key){
 
 void init(Node **Hash, int size){
     for(int i=0;i<size;i++){
-        // printf("%d\n",i);
         Hash[i] = getNode();
     }
 }
@@ -79,28 +79,20 @@ int main(){
     long long int K = getK();
     getArray(N, Array);
 
-    // int hashSize = 10000000;//mod多少
     int count=0;
     long long int *Sum=(long long int*)malloc(sizeof(long long int)*N);
     Node **negative_Hash=(Node**)malloc(sizeof(Node*)*hashSize);
     Node **positive_Hash=(Node**)malloc(sizeof(Node*)*hashSize);
-    // int *negative_Hash=(int*)malloc(sizeof(int)*hashSize);
-    // int *positive_Hash=(int*)malloc(sizeof(int)*hashSize);
-    // printf("test1\n");
     init(negative_Hash, hashSize);
     init(positive_Hash, hashSize);
-    // printf("test2\n");
     Sum[0]=Array[0];
     for(int i=1;i<N;i++){
-        // printf("%llu\n",Sum[i-1]);
         Sum[i] = Sum[i-1] + Array[i];
     }
-    // printf("%llu\n",Sum[N-1]);
 
 
     for(int i=0;i<N;i++){
         int target = Sum[i]-K;
-        // printf("%d\n",target);
 
         //找區間和=K
         if(target<0){
@@ -124,10 +116,6 @@ int main(){
     }
 
     printf("%d\n",count);
-    
-
-
-
 
     return 0;
 }
