@@ -58,7 +58,6 @@ int findTargetCount(Node **Hash, int target){
     int hashValue = target%hashSize;
     Node *temp = Hash[hashValue];
     if(temp->count == 0){
-        // printf("test1\n");
         return 0;
     }
     else{
