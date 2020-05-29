@@ -7,13 +7,16 @@
 #include <string.h>
 #include <time.h>
 #include "akihabara.h"
+#pragma GCC optimize ("O3")
+#pragma GCC optimize ("Ofast") 
+#pragma GCC optimize("unroll-loops")
 
-long long int hashSize = 33554432;//mod多少
+long long int hashSize = 67108864;//mod多少
 
 typedef struct node{
     long long int key;
-    int count;
     struct node *next;
+    int count;
 }Node;
 
 Node *getNode(){
@@ -25,7 +28,7 @@ Node *getNode(){
 }
 
 void hash(Node **Hash, long long int key){
-    long long int hashValue=key&33554431;
+    long long int hashValue = key&(hashSize-1);
     Node *temp = Hash[hashValue];
     if(temp->count == 0){//空櫃子
         temp->count++;
@@ -55,7 +58,7 @@ void init(Node **Hash, long long int size){
 }
 
 int findTargetCount(Node **Hash, long long int target){
-    long long int hashValue = target&33554431;
+    long long int hashValue = target&(hashSize-1);
     Node *temp = Hash[hashValue];
     if(temp->count == 0){//這格是空的
         return 0;
@@ -81,12 +84,12 @@ int main(){
     long long int count=0;
     long long int *Sum=(long long int*)malloc(sizeof(long long int)*N);
     // Node *negative_Hash[4194304], *positive_Hash[4194304];
-    Node **negative_Hash=(Node**)malloc(sizeof(Node*)*hashSize);
-    Node **positive_Hash=(Node**)malloc(sizeof(Node*)*hashSize);
-
-    init(negative_Hash, hashSize);
-    init(positive_Hash, hashSize);
-
+    // Node **negative_Hash=(Node**)malloc(sizeof(Node*)*hashSize);
+    // Node **positive_Hash=(Node**)malloc(sizeof(Node*)*hashSize);
+    // init(negative_Hash, hashSize);
+    // init(positive_Hash, hashSize);
+    Node **Hash=(Node**)malloc(sizeof(Node*)*hashSize);
+    init(Hash,hashSize);
     Sum[0]=Array[0];
     for(int i=1;i<N;i++){
         Sum[i] = Sum[i-1] + Array[i];
@@ -95,25 +98,30 @@ int main(){
 
     for(int i=0;i<N;i++){
         long long int target = Sum[i]-K;
-
         //找區間和=K
-        if(target<0){
-            target = -target;
-            count+=findTargetCount(negative_Hash,target);
-        }else if(target == 0){
-            count++;
-            count+=findTargetCount(positive_Hash,target);
-        }else
-            count+=findTargetCount(positive_Hash,target);
+        // if(target<0){
+        //     target = -target;
+        //     count+=findTargetCount(negative_Hash,target);
+        // }else if(target == 0){
+        //     count++;
+        //     count+=findTargetCount(positive_Hash,target);
+        // }else
+        //     count+=findTargetCount(positive_Hash,target);
+
+        if(target == 0)
+            ++count;
+        count+=findTargetCount(Hash,target);
 
 
         //處理key,Hash
-        if(Sum[i]<0){
-            long long int temp = -Sum[i];
-            hash(negative_Hash, temp);
-        }else{//Sum[i]>=0
-            hash(positive_Hash, Sum[i]);
-        }
+        // if(Sum[i]<0){
+        //     long long int temp = -Sum[i];
+        //     hash(negative_Hash, temp);
+        // }else{//Sum[i]>=0
+        //     hash(positive_Hash, Sum[i]);
+        // }
+
+        hash(Hash,Sum[i]);
 
     }
 
