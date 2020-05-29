@@ -11,7 +11,7 @@
 #pragma GCC optimize ("Ofast") 
 #pragma GCC optimize("unroll-loops")
 
-long long int hashSize = 33554432;//mod多少
+long long int hashSize = 16777216;//mod多少
 
 typedef struct node{
     long long int key;
