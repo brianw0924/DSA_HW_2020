@@ -8,7 +8,7 @@
 #include <time.h>
 #include "akihabara.h"
 
-long long int hashSize = 16777216;//mod多少
+long long int hashSize = 33554432;//mod多少
 
 typedef struct node{
     long long int key;
@@ -25,7 +25,7 @@ Node *getNode(){
 }
 
 void hash(Node **Hash, long long int key){
-    long long int hashValue=key&16777215;
+    long long int hashValue=key&33554431;
     Node *temp = Hash[hashValue];
     if(temp->count == 0){//空櫃子
         temp->count++;
@@ -55,7 +55,7 @@ void init(Node **Hash, long long int size){
 }
 
 int findTargetCount(Node **Hash, long long int target){
-    long long int hashValue = target&16777215;
+    long long int hashValue = target&33554431;
     Node *temp = Hash[hashValue];
     if(temp->count == 0){//這格是空的
         return 0;
