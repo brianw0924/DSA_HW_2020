@@ -8,8 +8,8 @@
 #include <time.h>
 #include "akihabara.h"
 
-
-long long int hashSize = 517619;//mod多少
+long long int hashSize = 4194304;//mod多少
+// long long int power_2 = 2147483648;
 
 typedef struct node{
     long long int key;
@@ -17,9 +17,13 @@ typedef struct node{
     struct node *next;
 }Node;
 
+Node storage[100000000];
+Node *nextNode = &storage[0];
+
 Node *getNode(){
-    Node *N=(Node*)malloc(sizeof(Node));
+    Node *N = nextNode;
     assert(N!=NULL);
+    nextNode++;
     N->count = 0;
     N->next = NULL;
     return N;
@@ -52,6 +56,7 @@ void init(Node **Hash, long long int size){
     for(int i=0;i<size;i++){
         Hash[i] = getNode();
     }
+    // printf("test");
 }
 
 int findTargetCount(Node **Hash, long long int target){
@@ -78,12 +83,13 @@ int main(){
     long long int K = getK();
     getArray(N, Array);
 
-    int count=0;
+    long long int count=0;
     long long int *Sum=(long long int*)malloc(sizeof(long long int)*N);
     Node **negative_Hash=(Node**)malloc(sizeof(Node*)*hashSize);
     Node **positive_Hash=(Node**)malloc(sizeof(Node*)*hashSize);
     init(negative_Hash, hashSize);
     init(positive_Hash, hashSize);
+
     Sum[0]=Array[0];
     for(int i=1;i<N;i++){
         Sum[i] = Sum[i-1] + Array[i];
@@ -114,7 +120,7 @@ int main(){
 
     }
 
-    printf("%d\n",count);
+    printf("%llu\n",count);
 
     return 0;
 }
