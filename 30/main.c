@@ -7,16 +7,17 @@
 #include <string.h>
 #include <time.h>
 #include "akihabara.h"
-#pragma GCC optimize("Ofast,no-stack-protector,unroll-loops,fast-math")
+#pragma GCC optimize("O3,Ofast,no-stack-protector,unroll-loops,fast-math")
 #pragma GCC target("sse,sse2,sse3,ssse3,sse4.1,sse4.2,avx,avx2,popcnt,tune=native")
 
 long long int hashSize = 16777216;//mod多少
-
 typedef struct node{
     long long int key;
     struct node *next;
     int count;
 }Node;
+Node storage[16777216];
+Node *nextNode = &storage[0];
 
 Node *getNode(){
     Node *N = (Node*)malloc(sizeof(Node));
@@ -51,7 +52,10 @@ void hash(Node **Hash, long long int key){
 
 void init(Node **Hash, long long int size){
     for(int i=0;i<size;i++){
-        Hash[i] = getNode();
+        Hash[i] = nextNode;
+        nextNode++;
+        Hash[i]->count = 0;
+        Hash[i]->next = NULL;
     }
     // printf("test");
 }
