@@ -16,17 +16,6 @@ typedef struct node{
     struct node *next;
 }Node;
 
-// Node storage[33554433];
-// Node *nextNode = &storage[0];
-
-// Node *getNode(){
-//     Node *N = nextNode;
-//     assert(N!=NULL);
-//     nextNode++;
-//     N->count = 0;
-//     N->next = NULL;
-//     return N;
-// }
 Node *getNode(){
     Node *N = (Node*)malloc(sizeof(Node));
     assert(N!=NULL);
@@ -36,7 +25,7 @@ Node *getNode(){
 }
 
 void hash(Node **Hash, long long int key){
-    long long int hashValue=key%hashSize;
+    long long int hashValue=key&16777215;
     Node *temp = Hash[hashValue];
     if(temp->count == 0){//空櫃子
         temp->count++;
@@ -66,7 +55,7 @@ void init(Node **Hash, long long int size){
 }
 
 int findTargetCount(Node **Hash, long long int target){
-    long long int hashValue = target%hashSize;
+    long long int hashValue = target&16777215;
     Node *temp = Hash[hashValue];
     if(temp->count == 0){//這格是空的
         return 0;
