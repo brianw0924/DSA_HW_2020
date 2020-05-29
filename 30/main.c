@@ -10,13 +10,13 @@
 #pragma GCC optimize("O3,Ofast,no-stack-protector,unroll-loops,fast-math")
 #pragma GCC target("sse,sse2,sse3,ssse3,sse4.1,sse4.2,avx,avx2,popcnt,tune=native")
 
-long long int hashSize = 8388608;//mod多少
+long long int hashSize = 21788233;//mod多少
 typedef struct node{
     long long int key;
     struct node *next;
     int count;
 }Node;
-Node storage[8388608];
+Node storage[21788233];
 Node *nextNode = &storage[0];
 
 Node *getNode(){
@@ -28,7 +28,9 @@ Node *getNode(){
 }
 
 void hash(Node **Hash, long long int key){
-    long long int hashValue = key&(hashSize-1);
+    long long int hashValue = key%hashSize;
+    if(hashValue<0)
+        hashValue+=hashSize;
     Node *temp = Hash[hashValue];
     if(temp->count == 0){//空櫃子
         temp->count++;
@@ -61,7 +63,9 @@ void init(Node **Hash, long long int size){
 }
 
 int findTargetCount(Node **Hash, long long int target){
-    long long int hashValue = target&(hashSize-1);
+    long long int hashValue = target%hashSize;
+    if(hashValue<0)
+        hashValue+=hashSize;
     Node *temp = Hash[hashValue];
     if(temp->count == 0){//這格是空的
         return 0;
