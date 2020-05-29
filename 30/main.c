@@ -10,13 +10,13 @@
 #pragma GCC optimize("O3,Ofast,no-stack-protector,unroll-loops,fast-math")
 #pragma GCC target("sse,sse2,sse3,ssse3,sse4.1,sse4.2,avx,avx2,popcnt,tune=native")
 
-long long int hashSize = 33554432;//mod多少
+long long int hashSize = 8388608;//mod多少
 typedef struct node{
     long long int key;
     struct node *next;
     int count;
 }Node;
-Node storage[33554432];
+Node storage[8388608];
 Node *nextNode = &storage[0];
 
 Node *getNode(){
