@@ -6,6 +6,8 @@
 #include <assert.h>
 #include <string.h>
 #include <time.h>
+#pragma GCC optimize("O3,Ofast,no-stack-protector,unroll-loops,fast-math")
+#pragma GCC target("sse,sse2,sse3,ssse3,sse4.1,sse4.2,avx,avx2,popcnt,tune=native")
 
 typedef struct node{
     int count;
@@ -13,17 +15,21 @@ typedef struct node{
     struct node *next;
 } Node;
 
+
+Node storage[2000005];
+Node *nextNode = &storage[0];
+
 Node *getPeople(){
-    Node *N =(Node*)malloc(sizeof(Node));
-    assert(N != NULL);
+    Node *N = nextNode;
+    nextNode++;
     N->next = NULL;
     N->count = 0;
     return N;
 }
 
 Node *getVirus(){
-    Node *N =(Node*)malloc(sizeof(Node));
-    assert(N != NULL);
+    Node *N = nextNode;
+    nextNode++;
     N->next = N;
     N->count = 0;
     return N;
@@ -47,34 +53,21 @@ int main() {
     int N,M;
     scanf("%d%d",&N,&M);
     int p,q,v;
-    // char s[3];
     int nextVirus=1;
 
-    // Make_set
-    // Node **people =(Node**)malloc(sizeof(Node*)*(N+1));
-    // Node **virusIndex =(Node**)malloc(sizeof(Node*)*(M+1));
     for(int j=1;j<1000003;j++){
         virusIndex[j] = getVirus();
         virusIndex[j]->virus = j;
-        // printf("%d\n",virusIndex[j]->virus);
     }
 
     for(int i=1;i<N+1;i++){
         people[i] = getPeople();
     }
 
-    // for(int i=0;i<M;i++){
-    //     scanf("%s",s);
-    //     printf("%s\n",s);
-    // }
 
     for(int i=0;i<M;i++){
-        // printf("i = %d\n",i);
-        // scanf("%c",&c);
-        // printf("%c\n",c);
         
         scanf("%s",s);
-        // printf("%s\n",s);
 
         switch(s[0]){
             case 'w'://感染
