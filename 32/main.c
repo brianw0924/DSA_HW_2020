@@ -74,15 +74,15 @@ void DFS(Graph *G,int start){
 }
 int Partition(int *A, int p, int r){
     int x = A[p];
-    int i = p;//left
-    int j = r;//right
-    while(1){
-        while(A[j]<x){
+    int i = p-1;//left
+    int j = r+1;//right
+    while(i<j){
+        do{
             j--;
-        }
-        while(A[i]>=x){
+        }while(A[j]>x);
+        do{
             i++;
-        }
+        }while(A[i]<x);
         if(i<j){
             int temp = A[j];
             A[j] = A[i];
@@ -91,31 +91,33 @@ int Partition(int *A, int p, int r){
         else
             return j;
     }
+    return j;
 }
 void Quicksort(int *A , int p , int r){
     if(p<r){
         int q =Partition(A, p, r);
-        Quicksort(A,p,q-1);
+        Quicksort(A,p,q);
         Quicksort(A,q+1,r);
     }
 }
 
 int Partition_node(Graph *G, int p, int r){
     int x = G->V[p].passed;
-    int i = p;//left
-    int j = r;//right
+    int i = p-1;//left
+    int j = r+1;//right
     // printf("test\n");
-    while(1){
-        while(G->V[j].passed<x){
-            // printf("V[%d]=%d\n",j,G->V[j].passed);
+    while(i<j){
+        
+        do{
             j--;
-        }
-        while(G->V[i].passed>=x){
-            // printf("V[%d]=%d\n",i,G->V[i].passed);
+        }while(G->V[j].passed>x);
+
+        do{
             i++;
-        }
+        }while(G->V[i].passed<x);
+
         if(i<j){
-            printf("(%d,%d)\n",i,j);
+            // printf("(%d,%d)\n",i,j);
             int temp = G->V[j].passed;
             G->V[j].passed = G->V[i].passed;
             G->V[i].passed = temp;
@@ -123,13 +125,18 @@ int Partition_node(Graph *G, int p, int r){
         else
             return j;
     }
+    return j;
 }
 
 void Quicksort_node(Graph *G,int p, int r){
     // printf("Round (%d,%d)\n",p,r);
+    // for(int i=1;i<(G->size+1);++i){
+    //         printf("%d ",G->V[i].passed);
+    // }
+    // printf("\n");
     if(p<r){
         int q =Partition_node(G, p, r);
-        Quicksort_node(G,p,q-1);
+        Quicksort_node(G,p,q);
         Quicksort_node(G,q+1,r);
     }
 }
@@ -182,7 +189,7 @@ int main(void){
 
 
     int sum=0;
-    for(int i=2;i<(n+1);++i){
+    for(int i=n-1;i>=1;--i){
         // printf("%d,%d\n",G->V[i].passed,d[i-1]);
         sum+=(d[i-1]*G->V[i].passed);
     }
