@@ -188,13 +188,12 @@ int main(void){
     Quicksort_node(G,1,n);
 
 
-    int sum=0;
+    long long int sum=0;
     for(int i=n-1;i>=1;--i){
         // printf("%d,%d\n",G->V[i].passed,d[i-1]);
         sum+=(d[i-1]*G->V[i].passed);
     }
-    printf("%d\n",sum);
-
+    printf("%llu\n",sum);
 
     return 0;
 }
