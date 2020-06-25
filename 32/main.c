@@ -74,8 +74,8 @@ void DFS(Graph *G,int start){
         adj = adj->next;
     }
 }
-int Partition(int *A, int p, int r){
-    int x = A[p];
+int Partition(long long int *A, int p, int r){
+    long long int x = A[p];
     int i = p-1;//left
     int j = r+1;//right
     while(i<j){
@@ -86,7 +86,7 @@ int Partition(int *A, int p, int r){
             i++;
         }while(A[i]<x);
         if(i<j){
-            int temp = A[j];
+            long long int temp = A[j];
             A[j] = A[i];
             A[i] = temp;
         }
@@ -95,25 +95,7 @@ int Partition(int *A, int p, int r){
     }
     return j;
 }
-// int Partition(int *A, int p, int r){
-//     int x = A[p];
-//     int i = r+1;
-//     for (int j=r;j>p;j--){
-//         if(A[j]>=x){
-//             i--;
-//             if(i!=j){
-//                 int temp = A[i];
-//                 A[i]=A[j];
-//                 A[j]=temp;
-//             }
-//         }
-//     }
-//     int temp = A[i-1];
-//     A[i-1]=A[p];
-//     A[p]=temp;
-//     return (i-1);
-// }
-void Quicksort(int *A , int p , int r){
+void Quicksort(long long int *A , int p , int r){
     if(p<r){
         int q =Partition(A, p, r);
         Quicksort(A,p,q);
@@ -125,7 +107,6 @@ int Partition_node(Graph *G, int p, int r){
     int x = G->V[p].passed;
     int i = p-1;//left
     int j = r+1;//right
-    // printf("test\n");
     while(i<j){
         do{
             j--;
@@ -193,9 +174,9 @@ int main(void){
         G->V[start].depart = true;
     }
     //difficulty
-    int *d =(int*) malloc(sizeof(int)*(n-1));
+    long long int *d =(long long int*) malloc(sizeof(long long int)*(n-1));
     for(int i=0;i<n;++i){
-        scanf("%d",&d[i]);
+        scanf("%llu",&d[i]);
     }
 
     // for(int i=0;i<n;++i){
