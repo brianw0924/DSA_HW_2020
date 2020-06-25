@@ -11,7 +11,7 @@ typedef struct vertex{
     int station;
     int passed;
     char color;
-    bool depart;
+    int depart;
 } Vertex;
 
 typedef struct adjlistnode{
@@ -34,7 +34,7 @@ Graph *makeGraph(int size){
         G->V[i].station = i;
         G->V[i].passed = 0;
         G->V[i].color = 'W';
-        G->V[i].depart = false;
+        G->V[i].depart = 0;
         G->Adjlist[i] = NULL;
     }
     return G;
@@ -61,8 +61,9 @@ void connect(Graph *G,int u, int v){
 }
 void DFS(Graph *G,int start){
     G->V[start].color = 'G';
-    if(G->V[start].depart == true)//如果他是學生起點的話就passed+1
-            G->V[start].passed++;
+    G->V[start].passed+=G->V[start].depart;
+    // if(G->V[start].depart == true)//如果他是學生起點的話就passed+1
+    //         G->V[start].passed++;
     Adjlistnode *adj = G->Adjlist[start];//第一個start的相鄰node
     while(adj!=NULL){
         if(G->V[adj->station].color == 'W'){
