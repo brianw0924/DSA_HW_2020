@@ -74,98 +74,96 @@ void DFS(Graph *G,int start){
         adj = adj->next;
     }
 }
-// int Partition(int *A, int p, int r){
-//     int x = A[p];
-//     int i = p-1;//left
-//     int j = r+1;//right
-//     while(i<j){
-//         do{
-//             j--;
-//         }while(A[j]>x);
-//         do{
-//             i++;
-//         }while(A[i]<x);
-//         if(i<j){
-//             int temp = A[j];
-//             A[j] = A[i];
-//             A[i] = temp;
-//         }
-//         else
-//             return j;
-//     }
-//     return j;
-// }
 int Partition(int *A, int p, int r){
     int x = A[p];
-    int i = r+1;
-    for (int j=r;j>p;j--){
-        if(A[j]>=x){
-            i--;
-            if(i!=j){
-                int temp = A[i];
-                A[i]=A[j];
-                A[j]=temp;
-            }
-        }
-    }
-    int temp = A[i-1];
-    A[i-1]=A[p];
-    A[p]=temp;
-    return (i-1);
-}
-void Quicksort(int *A , int p , int r){
-    if(p<r){
-        int q =Partition(A, p, r);
-        Quicksort(A,p,q-1);
-        Quicksort(A,q+1,r);
-    }
-}
-
-int Partition_node(Graph *G, int p, int r){
-    int x = G->V[p].passed;
     int i = p-1;//left
     int j = r+1;//right
-    // printf("test\n");
     while(i<j){
-        
         do{
             j--;
-        }while(G->V[j].passed>x);
-
+        }while(A[j]>x);
         do{
             i++;
-        }while(G->V[i].passed<x);
-
+        }while(A[i]<x);
         if(i<j){
-            // printf("(%d,%d)\n",i,j);
-            int temp = G->V[j].passed;
-            G->V[j].passed = G->V[i].passed;
-            G->V[i].passed = temp;
+            int temp = A[j];
+            A[j] = A[i];
+            A[i] = temp;
         }
         else
             return j;
     }
     return j;
 }
-
-// int Partition_node(Graph *G, int p, int r){
-//     int x = G->V[p].passed;
+// int Partition(int *A, int p, int r){
+//     int x = A[p];
 //     int i = r+1;
 //     for (int j=r;j>p;j--){
-//         if(G->V[j].passed>=x){
+//         if(A[j]>=x){
 //             i--;
 //             if(i!=j){
-//                 int temp = G->V[i].passed;
-//                 G->V[i].passed = G->V[j].passed;
-//                 G->V[j].passed=temp;
+//                 int temp = A[i];
+//                 A[i]=A[j];
+//                 A[j]=temp;
 //             }
 //         }
 //     }
-//     int temp = G->V[i-1].passed;
-//     G->V[i-1].passed = G->V[p].passed;
-//     G->V[p].passed = temp;
+//     int temp = A[i-1];
+//     A[i-1]=A[p];
+//     A[p]=temp;
 //     return (i-1);
 // }
+void Quicksort(int *A , int p , int r){
+    if(p<r){
+        int q =Partition(A, p, r);
+        Quicksort(A,p,q);
+        Quicksort(A,q+1,r);
+    }
+}
+
+// int Partition_node(Graph *G, int p, int r){
+//     int x = G->V[p].passed;
+//     int i = p-1;//left
+//     int j = r+1;//right
+//     // printf("test\n");
+//     while(i<j){
+//         do{
+//             j--;
+//         }while(G->V[j].passed>x);
+//         do{
+//             i++;
+//         }while(G->V[i].passed<x);
+
+//         if(i<j){
+//             // printf("(%d,%d)\n",i,j);
+//             int temp = G->V[j].passed;
+//             G->V[j].passed = G->V[i].passed;
+//             G->V[i].passed = temp;
+//         }
+//         else
+//             return j;
+//     }
+//     return j;
+// }
+
+int Partition_node(Graph *G, int p, int r){
+    int x = G->V[p].passed;
+    int i = r+1;
+    for (int j=r;j>p;j--){
+        if(G->V[j].passed>=x){
+            i--;
+            if(i!=j){
+                int temp = G->V[i].passed;
+                G->V[i].passed = G->V[j].passed;
+                G->V[j].passed=temp;
+            }
+        }
+    }
+    int temp = G->V[i-1].passed;
+    G->V[i-1].passed = G->V[p].passed;
+    G->V[p].passed = temp;
+    return (i-1);
+}
 
 void Quicksort_node(Graph *G,int p, int r){
     // printf("Round (%d,%d)\n",p,r);
@@ -175,7 +173,7 @@ void Quicksort_node(Graph *G,int p, int r){
     // printf("\n");
     if(p<r){
         int q =Partition_node(G, p, r);
-        Quicksort_node(G,p,q);
+        Quicksort_node(G,p,q-1);
         Quicksort_node(G,q+1,r);
     }
 }
