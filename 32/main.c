@@ -13,7 +13,7 @@ typedef struct vertex{
     int station;
     int passed;
     char color;
-    int depart;
+    bool depart;
 } Vertex;
 
 typedef struct adjlistnode{
@@ -36,7 +36,7 @@ Graph *makeGraph(int size){
         G->V[i].station = i;
         G->V[i].passed = 0;
         G->V[i].color = 'W';
-        G->V[i].depart = 0;
+        G->V[i].depart = false;
         G->Adjlist[i] = NULL;
     }
     return G;
@@ -48,7 +48,7 @@ Adjlistnode *getNode(int station){
     nextNode->station = station;
     nextNode->next = NULL;
     Adjlistnode *temp = nextNode;
-    nextNode++;
+    ++nextNode;
     return temp;
 }
 void connect(Graph *G,int u, int v){
@@ -62,9 +62,9 @@ void connect(Graph *G,int u, int v){
 }
 void DFS(Graph *G,int start){
     G->V[start].color = 'G';
-    G->V[start].passed+=G->V[start].depart;
-    // if(G->V[start].depart == true)//如果他是學生起點的話就passed+1
-    //         G->V[start].passed++;
+    // G->V[start].passed+=G->V[start].depart;
+    if(G->V[start].depart == true)//如果他是學生起點的話就passed+1
+            ++(G->V[start].passed);
     Adjlistnode *adj = G->Adjlist[start];//第一個start的相鄰node
     while(adj!=NULL){
         if(G->V[adj->station].color == 'W'){
@@ -80,10 +80,10 @@ int Partition(long long int *A, int p, int r){
     int j = r+1;//right
     while(1){
         do{
-            j--;
+            --j;
         }while(A[j]>x);
         do{
-            i++;
+            ++i;
         }while(A[i]<x);
         if(i<j){
             long long int temp = A[j];
@@ -108,10 +108,10 @@ int Partition_node(Graph *G, int p, int r){
     int j = r+1;//right
     while(1){
         do{
-            j--;
+            --j;
         }while(G->V[j].passed>x);
         do{
-            i++;
+            ++i;
         }while(G->V[i].passed<x);
 
         if(i<j){
@@ -153,19 +153,11 @@ int main(void){
         scanf("%llu",&d[i]);
     }
 
-    // for(int i=0;i<n;++i){
-    //     printf("%d ",d[i]);
-    // }
-    // printf("\n");
     Quicksort(d,0,n-1);
-    // for(int i=0;i<n;++i){
-    //     printf("%d ",d[i]);
-    // }
-    // printf("\n");
 
     //edge
     int u,v;
-    for(int i=1;i<n;i++){
+    for(int i=1;i<n;++i){
         scanf("%d%d",&u,&v);
         connect(G,u,v);
         connect(G,v,u);
