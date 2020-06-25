@@ -78,7 +78,7 @@ int Partition(long long int *A, int p, int r){
     long long int x = A[p];
     int i = p-1;//left
     int j = r+1;//right
-    while(i<j){
+    while(1){
         do{
             j--;
         }while(A[j]>x);
@@ -93,7 +93,6 @@ int Partition(long long int *A, int p, int r){
         else
             return j;
     }
-    return j;
 }
 void Quicksort(long long int *A , int p , int r){
     if(p<r){
@@ -107,7 +106,7 @@ int Partition_node(Graph *G, int p, int r){
     int x = G->V[p].passed;
     int i = p-1;//left
     int j = r+1;//right
-    while(i<j){
+    while(1){
         do{
             j--;
         }while(G->V[j].passed>x);
@@ -124,34 +123,9 @@ int Partition_node(Graph *G, int p, int r){
         else
             return j;
     }
-    return j;
 }
 
-// int Partition_node(Graph *G, int p, int r){
-//     int x = G->V[p].passed;
-//     int i = r+1;
-//     for (int j=r;j>p;j--){
-//         if(G->V[j].passed>=x){
-//             i--;
-//             if(i!=j){
-//                 int temp = G->V[i].passed;
-//                 G->V[i].passed = G->V[j].passed;
-//                 G->V[j].passed=temp;
-//             }
-//         }
-//     }
-//     int temp = G->V[i-1].passed;
-//     G->V[i-1].passed = G->V[p].passed;
-//     G->V[p].passed = temp;
-//     return (i-1);
-// }
-
 void Quicksort_node(Graph *G,int p, int r){
-    // printf("Round (%d,%d)\n",p,r);
-    // for(int i=1;i<(G->size+1);++i){
-    //         printf("%d ",G->V[i].passed);
-    // }
-    // printf("\n");
     if(p<r){
         int q =Partition_node(G, p, r);
         Quicksort_node(G,p,q);
@@ -199,12 +173,7 @@ int main(void){
 
     //DFS
     DFS(G,1);
-    // for(int i=1;i<(n+1);++i){
-    //     printf("%d ",G->V[i].passed);
-    // }
-    // printf("\n");
     Quicksort_node(G,1,n);
-
 
     long long int sum=0;
     for(int i=n-1;i>=1;--i){
