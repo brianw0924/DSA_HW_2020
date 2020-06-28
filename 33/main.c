@@ -161,7 +161,7 @@ int main(void){
     int N,M,s,t,u,v,height;
     scanf("%d%d",&N,&M);
     Graph *G = makeGraph(N,M);//這裡會RE!!!!!!!!!!!!!!!!!!!!!!
-    // return 0;
+    return 0;
     //edge
     for(int i=0;i<M;++i){
         scanf("%d%d",&u,&v);
