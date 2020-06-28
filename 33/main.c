@@ -22,7 +22,7 @@ Listnode storage[1000002];//12000KB
 Listnode *nextListnode = &storage[0];
 
 typedef struct graph{
-    long long int *d;
+    int *d;
     Vertex *tower;
     Listnode **Adjlist;
     int V;
@@ -36,11 +36,11 @@ typedef struct heap{
 Graph *makeGraph(int V, int E){
     Graph *G = (Graph*) malloc(sizeof(Graph));
     G->V = V;
-    G->d = (long long int*) malloc(sizeof(long long int)*(V+1));//2000KB
-    return G;
-    for(int i=1;i<(V+1);++i)//這裡會RE!!!!!!!!!!!!!!!!!!!!
-        G->d[i] = 1000000001;
+    G->d = (int*) malloc(sizeof(int)*(V+1));//2000KB
     // return G;
+    for(int i=1;i<(V+1);++i)//這裡會RE!!!!!!!!!!!!!!!!!!!!
+        G->d[i] = 101;
+    return G;
     G->tower = (Vertex*) malloc(sizeof(Vertex)*(V+1));//2000KB
     // return G;
     G->Adjlist = (Listnode**) malloc(sizeof(Listnode*)*(V+1));//12000KB
@@ -180,7 +180,7 @@ int main(void){
 
     scanf("%d%d",&s,&t);
     Dijkstra(G,s);
-    printf("%llu\n",G->d[t]);
+    printf("%d\n",G->d[t]);
 
     
     return 0;
