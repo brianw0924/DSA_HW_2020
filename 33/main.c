@@ -152,8 +152,8 @@ void Dijkstra(Graph *G,int s){
 int main(void){
     int N,M,s,t,u,v,height;
     scanf("%d%d",&N,&M);
-    Graph *G = makeGraph(N,M);
     return 0;
+    Graph *G = makeGraph(N,M);
     //edge
     for(int i=0;i<M;++i){
         scanf("%d%d",&u,&v);
