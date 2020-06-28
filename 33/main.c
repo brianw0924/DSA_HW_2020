@@ -19,7 +19,7 @@ Listnode storage[1000002];
 Listnode *nextListnode = &storage[0];
 
 typedef struct graph{
-    int *d,*height;//花的最短時間 and 各塔高度
+    int d[500001],height[5000001];//花的最短時間 and 各塔高度
     Listnode **Adjlist;//相鄰串列
     int V;//塔數量
 } Graph;
@@ -33,11 +33,9 @@ typedef struct heap{
 Graph *makeGraph(int V, int E){
     Graph *G = (Graph*) malloc(sizeof(Graph));
     G->V = V;
-    G->d = (int*) malloc(sizeof(int)*(V+1));
     for(int k=1;k<(V+1);++k){
         G->d[k] = 1000000001;
     }
-    G->height = (int*) malloc(sizeof(int)*(V+1));
     G->Adjlist = (Listnode**) malloc(sizeof(Listnode*)*(V+1));
     for(int i=1;i<(V+1);++i){
         G->Adjlist[i]= NULL;
@@ -76,8 +74,8 @@ int cmp(Graph *G, Heap *h,int i, int j){
 
 void heapify(Graph *G, Heap *h, int i){
     int min = i;
-    int r = right(i);
-    int l = left(i);
+    int r = 2*i+1;
+    int l = 2*i;
     // printf("min=%d,r=%d,l=%d\n",min,r,l);
     if(r<(h->size+1)){
         min = cmp(G,h,r,cmp(G,h,i,l));
