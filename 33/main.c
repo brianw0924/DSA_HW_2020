@@ -25,8 +25,8 @@ typedef struct graph{
 
 typedef struct heap{
     int size;
-    int *arr;
-    int *index;
+    int *arr;//裡面裝 "塔的編號"
+    int *index;//裡面裝 "塔在heap的哪一格"
 } Heap;
 
 Graph *makeGraph(int V, int E){
@@ -80,7 +80,7 @@ void heapify(Graph *G, Heap *h, int i){
     if(r<(h->size+1)){
         min = cmp(G,h,r,cmp(G,h,i,l));
     }else if(l<(h->size+1)){
-        min = cmp(G,h,l,i);
+        min = cmp(G,h,i,l);
     }
     // printf("min=%d\n",min);
     if(min != i){
@@ -100,17 +100,17 @@ Heap *makeHeap(Graph *G, int s){
     h->size = G->V;
     h->arr = (int*) malloc(sizeof(int)*(h->size+1));
     h->index = (int*) malloc(sizeof(int)*(h->size+1));
-    // for(int i=parent(h->size);i>0;--i)
-    //     heapify(G,h,i);
     for(int i=1;i<(h->size+1);++i){
         h->arr[i] = i;
         h->index[i] = i;
     }
-    int temp = h->arr[1];
-    h->arr[1] = s;
-    h->arr[s] = h->arr[1];
-    h->index[1] = s;
-    h->index[s] = 1;
+    for(int i=parent(h->size);i>0;--i)
+        heapify(G,h,i);
+    // int temp = h->arr[1];
+    // h->arr[1] = s;
+    // h->arr[s] = h->arr[1];
+    // h->index[1] = s;
+    // h->index[s] = 1;
     
 
     // printf("INITIALLY,HEAP =\n");
