@@ -9,23 +9,18 @@
 // #pragma GCC optimize("O3,Ofast,no-stack-protector,unroll-loops,fast-math")
 // #pragma GCC target("sse,sse2,sse3,ssse3,sse4.1,sse4.2,avx,avx2,popcnt,tune=native")
 
-typedef struct vertex{
-    int height;
-} Vertex;
-
 typedef struct listnode{
     int num;
     struct listnode *next;
 } Listnode;
 
-Listnode storage[1000002];//12000KB
+Listnode storage[1000002];
 Listnode *nextListnode = &storage[0];
 
 typedef struct graph{
-    int *d;//花的最短時間
-    Vertex *tower;//點集合
+    int *d,*height;//花的最短時間 and 各塔高度
     Listnode **Adjlist;//相鄰串列
-    int V;//點數量
+    int V;//塔數量
 } Graph;
 
 typedef struct heap{
@@ -36,16 +31,12 @@ typedef struct heap{
 Graph *makeGraph(int V, int E){
     Graph *G = (Graph*) malloc(sizeof(Graph));
     G->V = V;
-    G->d = (int*) malloc(sizeof(int)*(V+1));//2000KB
-    // return G;
-    for(int k=1;k<(V+1);++k){//這裡會RE!!!!!!why????
+    G->d = (int*) malloc(sizeof(int)*(V+1));
+    for(int k=1;k<(V+1);++k){
         G->d[k] = 1000000001;
-        // printf("%d\n",k);
     }
-    // return G;
-    G->tower = (Vertex*) malloc(sizeof(Vertex)*(V+1));//2000KB
-    // return G;
-    G->Adjlist = (Listnode**) malloc(sizeof(Listnode*)*(V+1));//12000KB
+    G->height = (int*) malloc(sizeof(int)*(V+1));
+    G->Adjlist = (Listnode**) malloc(sizeof(Listnode*)*(V+1));
     for(int i=1;i<(V+1);++i){
         G->Adjlist[i]= NULL;
     }
@@ -102,7 +93,7 @@ void heapify(Graph *G, Heap *h, int i){
 Heap *makeHeap(Graph *G, int s){
     Heap *h = (Heap*) malloc(sizeof(Heap));
     h->size = G->V;
-    h->arr = (int*) malloc(sizeof(int)*(h->size+1));//2000KB
+    h->arr = (int*) malloc(sizeof(int)*(h->size+1));
     for(int i=1;i<(h->size+1);++i)
         h->arr[i] = i;
     int temp = h->arr[1];
@@ -122,12 +113,23 @@ int Extract_min(Graph *G,Heap *h){
 
 
 void Relax(Graph *G, int u, int v){
-    if((G->tower[v].height) > (G->tower[u].height)){//v比u高
-        if(G->d[v] > G->tower[v].height)
-            G->d[v] = G->tower[v].height;
+    if((G->height[v]) > (G->height[u])){//v比u高
+        if(G->d[v] > G->d[u]){//v的最短天數 > u的最短天數
+            if(G->d[u] < G->height[v]){//u的最短天數 < v的高度
+                if(G->d[v] > G->height[v])//v的最短天數 > v的height
+                    G->d[v] = G->height[v];
+            }
+            else//u的最短天數 >= v的高度
+                G->d[v] = G->d[u];
+
+        }else{//v的最短天數 < u的最短天數
+            if(G->d[v] > G->height[v])//v的最短天數 > v的height
+                G->d[v] = G->height[v];
+        }
+            
     }
     else{//u比v高
-        if(G->d[v]>G->d[u])
+        if(G->d[v]>G->d[u])//v的最短天數 > u的最短天數
             G->d[v] = G->d[u];
     }
     // printf("vertex[%d] = %d\n",v,G->d[v]);
@@ -160,7 +162,7 @@ void Dijkstra(Graph *G,int s){
 int main(void){
     int N,M,s,t,u,v,height;
     scanf("%d%d",&N,&M);
-    Graph *G = makeGraph(N,M);//這裡會RE!!!!!!!!!!!!!!!!!!!!!!
+    Graph *G = makeGraph(N,M);
     // return 0;
     //edge
     for(int i=0;i<M;++i){
@@ -180,7 +182,7 @@ int main(void){
 
     //height
     for(int i=1;i<(N+1);++i){
-        scanf("%d",&G->tower[i].height);
+        scanf("%d",&G->height[i]);
         // printf("%d\n",G->tower[i].height);
     }
 
