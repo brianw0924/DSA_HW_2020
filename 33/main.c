@@ -40,7 +40,7 @@ Graph *makeGraph(int V, int E){
     for(int i=1;i<(V+1);++i)
         G->d[i] = 1000000001;
     G->tower = (Vertex*) malloc(sizeof(Vertex)*(V+1));//2000KB
-    // return G;
+    return G;
     G->Adjlist = (Listnode**) malloc(sizeof(Listnode*)*(V+1));//12000KB
     for(int i=1;i<(V+1);++i){
         G->Adjlist[i]= NULL;
