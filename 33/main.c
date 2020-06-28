@@ -10,7 +10,6 @@
 #pragma GCC target("sse,sse2,sse3,ssse3,sse4.1,sse4.2,avx,avx2,popcnt,tune=native")
 
 typedef struct vertex{
-    int num;
     int height;
 } Vertex;
 
@@ -43,7 +42,6 @@ Graph *makeGraph(int V, int E){
     G->tower = (Vertex*) malloc(sizeof(Vertex)*(V+1));//4000KB
     G->Adjlist = (Listnode**) malloc(sizeof(Listnode*)*(V+1));//12000KB
     for(int i=1;i<(V+1);++i){
-        G->tower[i].num = i;
         G->Adjlist[i]= NULL;
     }
     return G;
