@@ -6,7 +6,7 @@
 #include <assert.h>
 #include <string.h>
 #include <time.h>
-#pragma GCC optimize("Ofast,no-stack-protector,unroll-loops,fast-math")
+// #pragma GCC optimize("O3,Ofast,no-stack-protector,unroll-loops,fast-math")
 #pragma GCC target("sse,sse2,sse3,ssse3,sse4.1,sse4.2,avx,avx2,popcnt,tune=native")
 
 typedef struct listnode{
@@ -105,13 +105,13 @@ Heap *makeHeap(Graph *G, int s){
         h->arr[i] = i;
         h->index[i] = i;
     }
-    for(int i=parent(h->size);i>0;--i)
-        heapify(G,h,i);
-    // int temp = h->arr[1];
-    // h->arr[1] = s;
-    // h->arr[s] = h->arr[1];
-    // h->index[1] = s;
-    // h->index[s] = 1;
+    // for(int i=parent(h->size);i>0;--i)
+    //     heapify(G,h,i);
+    int temp = h->arr[1];
+    h->arr[1] = s;
+    h->arr[s] = temp;
+    h->index[1] = s;
+    h->index[s] = 1;
     
 
     // printf("INITIALLY,HEAP =\n");
