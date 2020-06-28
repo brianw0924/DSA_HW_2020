@@ -39,7 +39,8 @@ Graph *makeGraph(int V, int E){
     G->d = (int*) malloc(sizeof(int)*(V+1));//2000KB
     for(int i=1;i<(V+1);++i)
         G->d[i] = 1000000001;
-    G->tower = (Vertex*) malloc(sizeof(Vertex)*(V+1));//4000KB
+    G->tower = (Vertex*) malloc(sizeof(Vertex)*(V+1));//2000KB
+    // return G;
     G->Adjlist = (Listnode**) malloc(sizeof(Listnode*)*(V+1));//12000KB
     for(int i=1;i<(V+1);++i){
         G->Adjlist[i]= NULL;
@@ -152,6 +153,7 @@ int main(void){
     int N,M,s,t,u,v,height;
     scanf("%d%d",&N,&M);
     Graph *G = makeGraph(N,M);//這裡會RE!!!!!!!!!!!!!!!!!!!!!!
+    return 0;
     //edge
     for(int i=0;i<M;++i){
         scanf("%d%d",&u,&v);
