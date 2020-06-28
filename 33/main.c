@@ -37,10 +37,10 @@ Graph *makeGraph(int V, int E){
     Graph *G = (Graph*) malloc(sizeof(Graph));
     G->V = V;
     G->d = (long long int*) malloc(sizeof(long long int)*(V+1));//2000KB
-    // return G;
+    return G;
     for(int i=1;i<(V+1);++i)//這裡會RE!!!!!!!!!!!!!!!!!!!!
         G->d[i] = 1000000001;
-    return G;
+    // return G;
     G->tower = (Vertex*) malloc(sizeof(Vertex)*(V+1));//2000KB
     // return G;
     G->Adjlist = (Listnode**) malloc(sizeof(Listnode*)*(V+1));//12000KB
