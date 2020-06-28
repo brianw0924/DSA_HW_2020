@@ -22,7 +22,7 @@ Listnode storage[1000002];//12000KB
 Listnode *nextListnode = &storage[0];
 
 typedef struct graph{
-    int *d;
+    int d[500001];
     Vertex *tower;
     Listnode **Adjlist;
     int V;
@@ -36,15 +36,17 @@ typedef struct heap{
 Graph *makeGraph(int V, int E){
     Graph *G = (Graph*) malloc(sizeof(Graph));
     G->V = V;
-    G->d = (int*) malloc(sizeof(int)*(G->V+5));//2000KB
+    // G->d = (int*) malloc(sizeof(int)*(V+1));//2000KB
     // return G;
-    for(int k=1;k<(G->V+1);++k)//這裡會RE!!!!!!why????
+    for(int k=1;k<500002;++k){//這裡會RE!!!!!!why????
         G->d[k] = 1000000001;
+        // printf("%d\n",k);
+    }
+    return G;
+    G->tower = (Vertex*) malloc(sizeof(Vertex)*(V+1));//2000KB
     // return G;
-    G->tower = (Vertex*) malloc(sizeof(Vertex)*(G->V+1));//2000KB
-    // return G;
-    G->Adjlist = (Listnode**) malloc(sizeof(Listnode*)*(G->V+1));//12000KB
-    for(int i=1;i<(G->V+1);++i){
+    G->Adjlist = (Listnode**) malloc(sizeof(Listnode*)*(V+1));//12000KB
+    for(int i=1;i<(V+1);++i){
         G->Adjlist[i]= NULL;
     }
     return G;
