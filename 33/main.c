@@ -112,18 +112,7 @@ Heap *makeHeap(Graph *G, int s){
     h->arr[s] = temp;
     h->index[1] = s;
     h->index[s] = 1;
-    
 
-    // printf("INITIALLY,HEAP =\n");
-    // for (int i=1;i<(h->size+1);++i){
-    //     printf("%d ",h->arr[i]);
-    // }
-    // printf("\n");
-    // for (int i=1;i<(h->size+1);++i){
-    //     printf("d=%d ",G->d[h->arr[i]]);
-    // }
-    // printf("\n\n");
-    
     return h;
 }
 
