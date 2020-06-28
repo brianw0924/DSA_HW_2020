@@ -36,12 +36,10 @@ typedef struct heap{
 Graph *makeGraph(int V, int E){
     Graph *G = (Graph*) malloc(sizeof(Graph));
     G->V = V;
-    G->d = (int*) malloc(sizeof(int)*(G->V+1));//2000KB
+    G->d = (int*) malloc(sizeof(int)*(G->V+5));//2000KB
     // return G;
-    for(int k=1;k<6;++k){//這裡會RE!!!!!!WHY?????????????
+    for(int k=1;k<(G->V+1);++k)//這裡會RE!!!!!!why????
         G->d[k] = 1000000001;
-        // printf("%d\n",k);
-    }
     // return G;
     G->tower = (Vertex*) malloc(sizeof(Vertex)*(G->V+1));//2000KB
     // return G;
