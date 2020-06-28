@@ -72,6 +72,7 @@ int cmp(Graph *G, Heap *h,int i, int j){
     return j;
 }
 
+
 void heapify(Graph *G, Heap *h, int i){
     int min = i;
     int r = right(i);
