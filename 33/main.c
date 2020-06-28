@@ -7,6 +7,7 @@
 #include <string.h>
 #include <time.h>
 // #pragma GCC optimize("O3,Ofast,no-stack-protector,unroll-loops,fast-math")
+#pragma GCC optimize("unroll-loops,fast-math")
 #pragma GCC target("sse,sse2,sse3,ssse3,sse4.1,sse4.2,avx,avx2,popcnt,tune=native")
 
 typedef struct listnode{
@@ -121,28 +122,12 @@ int Extract_min(Graph *G,Heap *h){
     h->index[h->arr[h->size]] = 1;
     h->index[h->arr[1]] = h->size;
     h->arr[1] = h->arr[h->size--];
-    // printf("Extract %d\n",temp);
-    // for (int i=1;i<(h->size+1);++i){
-    //     printf("d=%d ",G->d[h->arr[i]]);
-    // }
-    // printf("\n");
-
     heapify(G,h,1);
-
-    // printf("After Extract , heap = ");
-    // for (int i=1;i<(h->size+1);++i)
-    //     printf("%d ",h->arr[i]);
-    // printf("\n");
-    // for (int i=1;i<(h->size+1);++i){
-    //     printf("d=%d ",G->d[h->arr[i]]);
-    // }
-    // printf("\n");
     return temp;
 }
 
 
 void Relax(Graph *G, int u, int v){
-    // printf("height = (%d,%d)\n",G->height[u],G->height[v]);
     if((G->height[v]) > (G->height[u])){//v比u高
         if(G->d[v] > G->d[u]){//v的最短天數 > u的最短天數
             if(G->d[u] < G->height[v]){//u的最短天數 < v的高度
@@ -151,27 +136,19 @@ void Relax(Graph *G, int u, int v){
             }
             else//u的最短天數 >= v的高度
                 G->d[v] = G->d[u];
-
         }
-        // else{//v的最短天數 <= u的最短天數
-        //     if(G->d[v] > G->height[v]){//v的最短天數 > v的height
-        //         G->d[v] = G->height[v];
-        //     }
-        // }
     }
     else{//u比v高
         if(G->d[v]>G->d[u]){//v的最短天數 > u的最短天數
             G->d[v] = G->d[u];
         }
     }
-    // printf("vertex[%d] = %d\n",v,G->d[v]);
     return;
 }
 
 void decrease_key(Graph *G, Heap *h, int v){
     int now = h->index[v];
     if(now<h->size+1){
-        // printf("decrease=%d\n",now);
         int p;
         while(now>1){
             p = parent(now);
@@ -192,35 +169,12 @@ void decrease_key(Graph *G, Heap *h, int v){
 void Dijkstra(Graph *G,int s){
     G->d[s] = 0;
     Heap* h = makeHeap(G,s);
-    // //debug
-    // for (int i=1;i<(h->size+1);++i)
-    //     printf("%d ",h->arr[i]);
-    // printf("\n");
-    // //debug
     while(h->size>0){
-        // for (int i=1;i<(h->size+1);++i){
-        //     printf("d=%d ",G->d[h->arr[i]]);
-        // }
-        // printf("\n");
         int u = Extract_min(G,h);
-        //debug
-        // printf("After Extract , heap = ");
-        // for (int i=1;i<(h->size+1);++i)
-        //     printf("%d ",h->arr[i]);
-        // printf("\n");
-        //debug
         Listnode *temp = G->Adjlist[u];
         while(temp != NULL){
             Relax(G,u,temp->num);
             decrease_key(G,h,temp->num);
-            // printf("After Decrease , heap = ");
-            // for (int i=1;i<(h->size+1);++i)
-            // printf("%d ",h->arr[i]);
-            // printf("\n");
-            // for (int i=1;i<(h->size+1);++i){
-            //     printf("d=%d ",G->d[h->arr[i]]);
-            // }
-            // printf("\n");
             temp = temp->next;
         }
     }
@@ -230,33 +184,18 @@ int main(void){
     int N,M,s,t,u,v,height;
     scanf("%d%d",&N,&M);
     Graph *G = makeGraph(N,M);
-    // return 0;
     //edge
     for(int i=0;i<M;++i){
         scanf("%d%d",&u,&v);
         connect(G,u,v);
         connect(G,v,u);
     }
-    // for(int i=1;i<(N+1);++i){
-    //     Listnode *temp = G->Adjlist[i];
-    //     while(temp!=NULL){
-    //         printf("%d",temp->num);
-    //         temp = temp->next;
-    //     }
-    //     printf("\n");
-    // }
-    // printf("test\n");
-
     //height
     for(int i=1;i<(N+1);++i){
         scanf("%d",&G->height[i]);
-        // printf("%d\n",G->tower[i].height);
     }
-
     scanf("%d%d",&s,&t);
     Dijkstra(G,s);
     printf("%d\n",G->d[t]);
-
-    
     return 0;
 }
