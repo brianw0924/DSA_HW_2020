@@ -65,8 +65,8 @@ int left(int i){
 int right(int i){
     return 2*i+1;
 }
-int cmp(Graph *G, int i, int j){
-    if(G->d[i] < G->d[j])
+int cmp(Graph *G, Heap *h,int i, int j){
+    if(G->d[h->arr[i]] < G->d[h->arr[j]])
         return i;
     return j;
 }
@@ -76,9 +76,9 @@ void heapify(Graph *G, Heap *h, int i){
     int r = right(i);
     int l = left(i);
     if(r<(h->size+1)){
-        min = cmp(G,r,cmp(G,i,l));
+        min = cmp(G,h,r,cmp(G,h,i,l));
     }else if(l<(h->size+1)){
-        min = cmp(G,l,i);
+        min = cmp(G,h,l,i);
     }
     
     if(min != i){
@@ -94,13 +94,17 @@ Heap *makeHeap(Graph *G, int s){
     Heap *h = (Heap*) malloc(sizeof(Heap));
     h->size = G->V;
     h->arr = (int*) malloc(sizeof(int)*(h->size+1));
+    // for(int i=parent(h->size);i>0;--i)
+    //     heapify(G,h,i);
     for(int i=1;i<(h->size+1);++i)
         h->arr[i] = i;
     int temp = h->arr[1];
     h->arr[1] = s;
     h->arr[s] = h->arr[1];
+
     // for (int i=1;i<(h->size+1);++i)
-    //     printf("%d\n",h->arr[i]);
+    //     printf("%d ",h->arr[i]);
+    // printf("\n");
     return h;
 }
 
@@ -146,11 +150,12 @@ void Dijkstra(Graph *G,int s){
     // //debug
     while(h->size>0){
         int u = Extract_min(G,h);
-        // //debug
+        // printf("Extract %d\n",u);
+        //debug
         // for (int i=1;i<(h->size+1);++i)
         //     printf("%d ",h->arr[i]);
         // printf("\n");
-        // //debug
+        //debug
         Listnode *temp = G->Adjlist[u];
         while(temp != NULL){
             Relax(G,u,temp->num);
