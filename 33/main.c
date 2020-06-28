@@ -38,8 +38,10 @@ Graph *makeGraph(int V, int E){
     G->V = V;
     G->d = (int*) malloc(sizeof(int)*(G->V+1));//2000KB
     // return G;
-    for(int k=0;k<(G->V+1);++k)//這裡會RE!!!!!!!!!!!!!!!!!!!!
+    for(int k=1;k<6;++k){//這裡會RE!!!!!!WHY?????????????
         G->d[k] = 1000000001;
+        // printf("%d\n",k);
+    }
     // return G;
     G->tower = (Vertex*) malloc(sizeof(Vertex)*(G->V+1));//2000KB
     // return G;
