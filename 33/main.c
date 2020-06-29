@@ -56,22 +56,6 @@ void connect(Graph *G,int u, int v){
         G->Adjlist[u] = new;
 }
 
-int parent(int i){
-    return i/2;
-}
-int left(int i){
-    return 2*i;
-}
-int right(int i){
-    return 2*i+1;
-}
-int cmp(Graph *G, Heap *h,int i, int j){
-    if(G->d[h->arr[i]] < G->d[h->arr[j]])
-        return i;
-    return j;
-}
-
-
 void heapify(Graph *G, Heap *h, int i){
     int key = h->arr[i];
     int Indexkey = h->index[key];
