@@ -32,12 +32,12 @@ typedef struct heap{
 Graph *makeGraph(int V, int E){
     Graph *G = (Graph*) malloc(sizeof(Graph));
     G->V = V;
-    // memset(&G->d[1],1000000001,sizeof(int)*V);
-    for(int k=1;k<(V+1);++k){
+    int size_plusone = V+1;
+    for(int k=1;k<size_plusone;++k){
         G->d[k] = 1000000001;
     }
-    G->Adjlist = (Listnode**) malloc(sizeof(Listnode*)*(V+1));
-    for(int i=1;i<(V+1);++i){
+    G->Adjlist = (Listnode**) malloc(sizeof(Listnode*)*size_plusone);
+    for(int i=1;i<size_plusone;++i){
         G->Adjlist[i]= NULL;
     }
     return G;
@@ -83,9 +83,10 @@ void heapify(Graph *G, Heap *h, int i){
 Heap *makeHeap(Graph *G, int s){
     Heap *h = (Heap*) malloc(sizeof(Heap));
     h->size = G->V;
-    h->arr = (int*) malloc(sizeof(int)*(h->size+1));
-    h->index = (int*) malloc(sizeof(int)*(h->size+1));
-    for(int i=1;i<(h->size+1);++i){
+    int size_plusone = h->size+1;
+    h->arr = (int*) malloc(sizeof(int)*size_plusone);
+    h->index = (int*) malloc(sizeof(int)*size_plusone);
+    for(int i=1;i<size_plusone;++i){
         h->arr[i] = i;
         h->index[i] = i;
     }
@@ -118,21 +119,10 @@ void Relax(Graph *G, int u, int v){
         }else{
             G->d[v] = ud;
         }
-
-
-        // if(G->d[v] > G->d[u]){//v的最短天數 > u的最短天數
-        //     if(G->d[u] < G->height[v]){//u的最短天數 < v的高度
-        //         // if(G->d[v] > G->height[v])//v的最短天數 > v的height
-        //         G->d[v] = G->height[v];
-        //     }
-        //     else//u的最短天數 >= v的高度
-        //         G->d[v] = G->d[u];
-        // }
     }
     else{//u比v高
-        if(G->d[v]>G->d[u])//v的最短天數 > u的最短天數
+        if(G->d[v]>G->d[u])
             G->d[v] = G->d[u];
-        
     }    
     // if((G->height[v]) > (G->height[u])){//v比u高
     //     if(G->d[u] < G->height[v]){
@@ -186,7 +176,7 @@ void Dijkstra(Graph *G,int s){
     while(h->size>0){
         int u = Extract_min(G,h);
         Listnode *temp = G->Adjlist[u];
-        while(temp != NULL){
+        while(temp){
             Relax(G,u,temp->num);
             decrease_key(G,h,temp->num);
             temp = temp->next;
@@ -206,8 +196,9 @@ int main(void){
         connect(G,v,u);
     }
     //height
+    int *p = &G->height[1];
     for(i=1;i<(N+1);++i){
-        scanf("%d",&G->height[i]);
+        scanf("%d",p++);
     }
     scanf("%d%d",&s,&t);
     Dijkstra(G,s);
