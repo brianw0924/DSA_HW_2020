@@ -6,7 +6,6 @@
 #include <assert.h>
 #include <string.h>
 #include <time.h>
-// #pragma GCC optimize("O3,Ofast,no-stack-protector,unroll-loops,fast-math")
 #pragma GCC optimize("no-stack-protector,unroll-loops,fast-math")
 #pragma GCC target("sse,sse2,sse3,ssse3,sse4.1,sse4.2,avx,avx2,popcnt,tune=native")
 
@@ -87,10 +86,16 @@ void heapify(Graph *G, Heap *h, int i){
         int temp = h->arr[i];
         h->arr[i] = h->arr[min];
         h->arr[min] = temp;
-        heapify(G,h,min);
+
         temp = h->index[h->arr[i]];
         h->index[h->arr[i]] = h->index[h->arr[min]];
         h->index[h->arr[min]] = temp;
+
+        heapify(G,h,min);
+
+    //     temp = h->index[h->arr[i]];
+    //     h->index[h->arr[i]] = h->index[h->arr[min]];
+    //     h->index[h->arr[min]] = temp;
     }
     return;
 }
