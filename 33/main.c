@@ -32,10 +32,10 @@ typedef struct heap{
 Graph *makeGraph(int V, int E){
     Graph *G = (Graph*) malloc(sizeof(Graph));
     G->V = V;
-    memset(&G->d[1],1000000001,sizeof(int)*V);
-    // for(int k=1;k<(V+1);++k){
-    //     G->d[k] = 1000000001;
-    // }
+    // memset(&G->d[1],1000000001,sizeof(int)*V);
+    for(int k=1;k<(V+1);++k){
+        G->d[k] = 1000000001;
+    }
     G->Adjlist = (Listnode**) malloc(sizeof(Listnode*)*(V+1));
     for(int i=1;i<(V+1);++i){
         G->Adjlist[i]= NULL;
