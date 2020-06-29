@@ -32,9 +32,10 @@ typedef struct heap{
 Graph *makeGraph(int V, int E){
     Graph *G = (Graph*) malloc(sizeof(Graph));
     G->V = V;
-    for(int k=1;k<(V+1);++k){
-        G->d[k] = 1000000001;
-    }
+    memset(&G->d[1],1000000001,sizeof(int)*V);
+    // for(int k=1;k<(V+1);++k){
+    //     G->d[k] = 1000000001;
+    // }
     G->Adjlist = (Listnode**) malloc(sizeof(Listnode*)*(V+1));
     for(int i=1;i<(V+1);++i){
         G->Adjlist[i]= NULL;
@@ -75,27 +76,23 @@ void heapify(Graph *G, Heap *h, int i){
     int min = i;
     int r = 2*i+1;
     int l = 2*i;
-    // printf("min=%d,r=%d,l=%d\n",min,r,l);
     if(r<(h->size+1)){
         min = cmp(G,h,r,cmp(G,h,i,l));
     }else if(l<(h->size+1)){
         min = cmp(G,h,i,l);
     }
-    // printf("min=%d\n",min);
     if(min != i){
+        //swap(h->arr[i],h->arr[min])
         int temp = h->arr[i];
         h->arr[i] = h->arr[min];
         h->arr[min] = temp;
-
+        //swap(h->index[h->arr[i]],h->index[h->arr[min]])
         temp = h->index[h->arr[i]];
         h->index[h->arr[i]] = h->index[h->arr[min]];
         h->index[h->arr[min]] = temp;
 
         heapify(G,h,min);
 
-    //     temp = h->index[h->arr[i]];
-    //     h->index[h->arr[i]] = h->index[h->arr[min]];
-    //     h->index[h->arr[min]] = temp;
     }
     return;
 }
@@ -109,8 +106,6 @@ Heap *makeHeap(Graph *G, int s){
         h->arr[i] = i;
         h->index[i] = i;
     }
-    // for(int i=parent(h->size);i>0;--i)
-    //     heapify(G,h,i);
     int temp = h->arr[1];
     h->arr[1] = s;
     h->arr[s] = temp;
@@ -151,9 +146,9 @@ void Relax(Graph *G, int u, int v){
 
 void decrease_key(Graph *G, Heap *h, int v){
     int now = h->index[v];
-    if(now<h->size+1){
+    if(now<h->size+1){//防止被extract的點再被decrease
         int p;
-        while(now>1){
+        while(now>1){//調整heap
             p = parent(now);
             if(G->d[h->arr[p]] > G->d[h->arr[now]]){
                 int temp = h->arr[p];
