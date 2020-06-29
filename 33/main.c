@@ -183,7 +183,6 @@ void Dijkstra(Graph *G,int s){
         }
     }
 }
-
 int main(void){
     int N,M,s,t,u,v,height;
     scanf("%d%d",&N,&M);
