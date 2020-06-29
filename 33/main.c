@@ -73,27 +73,47 @@ int cmp(Graph *G, Heap *h,int i, int j){
 
 
 void heapify(Graph *G, Heap *h, int i){
-    int min = i;
-    int r = 2*i+1;
-    int l = 2*i;
-    if(r<(h->size+1)){
-        min = cmp(G,h,r,cmp(G,h,i,l));
-    }else if(l<(h->size+1)){
-        min = cmp(G,h,i,l);
-    }
-    if(min != i){
-        //swap(h->arr[i],h->arr[min])
-        int temp = h->arr[i];
-        h->arr[i] = h->arr[min];
-        h->arr[min] = temp;
-        //swap(h->index[h->arr[i]],h->index[h->arr[min]])
-        temp = h->index[h->arr[i]];
-        h->index[h->arr[i]] = h->index[h->arr[min]];
-        h->index[h->arr[min]] = temp;
+    int key = h->arr[i];
+    int j = 2*i;
 
-        heapify(G,h,min);
+    while(j < h->size+1){//有左子
+        if(j<h->size){//有右子
+            if(G->d[h->arr[j]] > G->d[h->arr[j+1]])
+                ++j;
+        }
+        if(G->d[key] > G->d[h->arr[j]]){
+            h->arr[j/2] = h->arr[j];
+            h->index[h->arr[j/2]] = h->index[h->arr[j]];
+            j*=2;
+        }else
+            break;
+        h->arr[j/2] = key;
+        h->index[h->arr[j/2]] = h->index[key];
+
 
     }
+
+    // int min = i;
+    // int right = 2*i+1;
+    // int left = 2*i;
+    // if(r<(h->size+1)){
+    //     min = cmp(G,h,r,cmp(G,h,i,l));
+    // }else if(l<(h->size+1)){
+    //     min = cmp(G,h,i,l);
+    // }
+    // if(min != i){
+    //     //swap(h->arr[i],h->arr[min])
+    //     int temp = h->arr[i];
+    //     h->arr[i] = h->arr[min];
+    //     h->arr[min] = temp;
+    //     //swap(h->index[h->arr[i]],h->index[h->arr[min]])
+    //     temp = h->index[h->arr[i]];
+    //     h->index[h->arr[i]] = h->index[h->arr[min]];
+    //     h->index[h->arr[min]] = temp;
+
+    //     heapify(G,h,min);
+
+    // }
     return;
 }
 
