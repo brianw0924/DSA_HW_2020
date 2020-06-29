@@ -83,14 +83,12 @@ void heapify(Graph *G, Heap *h, int i){
         }
         if(G->d[key] > G->d[h->arr[j]]){
             h->arr[j/2] = h->arr[j];
-            h->index[h->arr[j/2]] = h->index[h->arr[j]];
+            h->index[h->arr[j]] = h->index[h->arr[j/2]];
             j*=2;
         }else
             break;
         h->arr[j/2] = key;
-        h->index[h->arr[j/2]] = h->index[key];
-
-
+        h->index[key] = h->index[j/2];
     }
 
     // int min = i;
