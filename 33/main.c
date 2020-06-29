@@ -74,21 +74,25 @@ int cmp(Graph *G, Heap *h,int i, int j){
 
 void heapify(Graph *G, Heap *h, int i){
     int key = h->arr[i];
-    int j = 2*i;
+    int Indexkey = h->index[key];
+    int j = i<<1;
+    int size_plusone = h->size+1;
 
-    while(j < h->size+1){//有左子
+    while(j < size_plusone){//有左子
         if(j<h->size){//有右子
             if(G->d[h->arr[j]] > G->d[h->arr[j+1]])
                 ++j;
-        }
+        }//現在j為左子右子中最小的
         if(G->d[key] > G->d[h->arr[j]]){
-            h->arr[j/2] = h->arr[j];
-            h->index[h->arr[j]] = h->index[h->arr[j/2]];
-            j*=2;
+            h->index[key] = h->index[h->arr[j]];
+            h->index[h->arr[j]] = Indexkey;
+            Indexkey = h->index[key];
+            h->arr[j>>1] = h->arr[j];
+            j = j<<1;
         }else
             break;
-        h->arr[j/2] = key;
-        h->index[key] = h->index[j/2];
+        
+        h->arr[j>>1] = key;
     }
 
     // int min = i;
