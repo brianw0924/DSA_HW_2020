@@ -129,8 +129,8 @@ void Relax(Graph *G, int u, int v){
     if((G->height[v]) > (G->height[u])){//v比u高
         if(G->d[v] > G->d[u]){//v的最短天數 > u的最短天數
             if(G->d[u] < G->height[v]){//u的最短天數 < v的高度
-                if(G->d[v] > G->height[v])//v的最短天數 > v的height
-                    G->d[v] = G->height[v];
+                // if(G->d[v] > G->height[v])//v的最短天數 > v的height
+                G->d[v] = G->height[v];
             }
             else//u的最短天數 >= v的高度
                 G->d[v] = G->d[u];
