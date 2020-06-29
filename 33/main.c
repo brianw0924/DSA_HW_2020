@@ -91,31 +91,8 @@ void heapify(Graph *G, Heap *h, int i){
             j = j<<1;
         }else
             break;
-        
         h->arr[j>>1] = key;
     }
-
-    // int min = i;
-    // int right = 2*i+1;
-    // int left = 2*i;
-    // if(r<(h->size+1)){
-    //     min = cmp(G,h,r,cmp(G,h,i,l));
-    // }else if(l<(h->size+1)){
-    //     min = cmp(G,h,i,l);
-    // }
-    // if(min != i){
-    //     //swap(h->arr[i],h->arr[min])
-    //     int temp = h->arr[i];
-    //     h->arr[i] = h->arr[min];
-    //     h->arr[min] = temp;
-    //     //swap(h->index[h->arr[i]],h->index[h->arr[min]])
-    //     temp = h->index[h->arr[i]];
-    //     h->index[h->arr[i]] = h->index[h->arr[min]];
-    //     h->index[h->arr[min]] = temp;
-
-    //     heapify(G,h,min);
-
-    // }
     return;
 }
 
@@ -171,7 +148,7 @@ void decrease_key(Graph *G, Heap *h, int v){
     if(now<h->size+1){//防止被extract的點再被decrease
         int p;
         while(now>1){//調整heap
-            p = parent(now);
+            p = now>>1;
             if(G->d[h->arr[p]] > G->d[h->arr[now]]){
                 int temp = h->arr[p];
                 h->arr[p] = h->arr[now];
@@ -205,13 +182,14 @@ int main(void){
     scanf("%d%d",&N,&M);
     Graph *G = makeGraph(N,M);
     //edge
-    for(int i=0;i<M;++i){
+    int i;
+    for(i=0;i<M;++i){
         scanf("%d%d",&u,&v);
         connect(G,u,v);
         connect(G,v,u);
     }
     //height
-    for(int i=1;i<(N+1);++i){
+    for(i=1;i<(N+1);++i){
         scanf("%d",&G->height[i]);
     }
     scanf("%d%d",&s,&t);
