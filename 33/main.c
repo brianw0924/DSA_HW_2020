@@ -112,41 +112,41 @@ int Extract_min(Graph *G,Heap *h){
 void Relax(Graph *G, int u, int v){
 
     int vh = G->height[v], ud = G->d[u];
-    if(vh > (G->height[u])){//v比u高
-        if(ud < vh){
-            if(G->d[v] > ud)
-                G->d[v] = vh;
-        }else{
-            G->d[v] = ud;
-        }
-    }
-    else{//u比v高
-        if(G->d[v]>G->d[u])
-            G->d[v] = G->d[u];
-    }    
-    // if((G->height[v]) > (G->height[u])){//v比u高
-    //     if(G->d[u] < G->height[v]){
-    //         if(G->d[v] > G->d[u])
-    //             G->d[v] = G->height[v];
+    // if(vh > (G->height[u])){//v比u高
+    //     if(ud < vh){
+    //         if(G->d[v] > ud)
+    //             G->d[v] = vh;
     //     }else{
-    //         G->d[v] = G->d[u];
+    //         G->d[v] = ud;
     //     }
-
-
-    //     // if(G->d[v] > G->d[u]){//v的最短天數 > u的最短天數
-    //     //     if(G->d[u] < G->height[v]){//u的最短天數 < v的高度
-    //     //         // if(G->d[v] > G->height[v])//v的最短天數 > v的height
-    //     //         G->d[v] = G->height[v];
-    //     //     }
-    //     //     else//u的最短天數 >= v的高度
-    //     //         G->d[v] = G->d[u];
-    //     // }
     // }
     // else{//u比v高
-    //     if(G->d[v]>G->d[u]){//v的最短天數 > u的最短天數
+    //     if(G->d[v]>G->d[u])
     //         G->d[v] = G->d[u];
-    //     }
-    // }
+    // }    
+    if((G->height[v]) > (G->height[u])){//v比u高
+        if(G->d[u] < G->height[v]){
+            if(G->d[v] > G->d[u])
+                G->d[v] = G->height[v];
+        }else{
+            G->d[v] = G->d[u];
+        }
+
+
+        // if(G->d[v] > G->d[u]){//v的最短天數 > u的最短天數
+        //     if(G->d[u] < G->height[v]){//u的最短天數 < v的高度
+        //         // if(G->d[v] > G->height[v])//v的最短天數 > v的height
+        //         G->d[v] = G->height[v];
+        //     }
+        //     else//u的最短天數 >= v的高度
+        //         G->d[v] = G->d[u];
+        // }
+    }
+    else{//u比v高
+        if(G->d[v]>G->d[u]){//v的最短天數 > u的最短天數
+            G->d[v] = G->d[u];
+        }
+    }
     return;
 }
 
