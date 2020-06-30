@@ -169,7 +169,6 @@ void decrease_key(Graph *G, Heap *h, int v){
         }
     }
 }
-
 void Dijkstra(Graph *G,int s){
     G->d[s] = 0;
     Heap* h = makeHeap(G,s);
